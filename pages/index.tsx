@@ -21,15 +21,24 @@
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div className="p-6 border rounded-lg hover:shadow-lg transition">
             <h3 className="text-xl font-bold mb-2">⚡️ Fast Setup</h3>
-            <p>Get up and running quickly with Next.js and TailwindCSS configured out of the box.</p>
+            <p>
+              Get up and running quickly with Next.js and TailwindCSS configured
+              out of the box.
+            </p>
           </div>
           <div className="p-6 border rounded-lg hover:shadow-lg transition">
             <h3 className="text-xl font-bold mb-2">🎨 Utility-First</h3>
-            <p>Style your components with Tailwind’s intuitive, low-level utility classes.</p>
+            <p>
+              Style your components with Tailwind’s intuitive, low-level utility
+              classes.
+            </p>
           </div>
           <div className="p-6 border rounded-lg hover:shadow-lg transition">
             <h3 className="text-xl font-bold mb-2">🔄 CI Ready</h3>
-            <p>Integrated GitHub Actions workflow ensures code quality with linting and builds.</p>
+            <p>
+              Integrated GitHub Actions workflow ensures code quality with
+              linting and builds.
+            </p>
           </div>
         </div>
       </section>

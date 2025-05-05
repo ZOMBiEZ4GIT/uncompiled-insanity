@@ -3,4 +3,4 @@
     '@tailwindcss/postcss': {},
     autoprefixer: {},
   },
-}
+};
