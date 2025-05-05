@@ -1,9 +1,14 @@
-﻿node_modules/
+﻿# dependencies
+node_modules/
+
+# Next.js build output
 .next/
 out/
-.env*
-npm-debug.log*
-.vscode/
-.idea/
-.DS_Store
+
+# Windows
 Thumbs.db
+ehthumbs.db
+
+# Environment variables
+.env.local
+.env.*.local
