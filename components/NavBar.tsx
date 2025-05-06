@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+﻿import Link from 'next/link';
 
 export default function NavBar() {
   return (
@@ -13,7 +13,10 @@ export default function NavBar() {
           <Link href="/" className="text-gray-700 hover:text-blue-500">
             Net Worth
           </Link>
-          <Link href="/data-entry" className="text-gray-700 hover:text-blue-500">
+          <Link
+            href="/data-entry"
+            className="text-gray-700 hover:text-blue-500"
+          >
             Data Entry
           </Link>
           <Link
@@ -34,5 +37,5 @@ export default function NavBar() {
         </div>
       </div>
     </nav>
-);
+  );
 }
