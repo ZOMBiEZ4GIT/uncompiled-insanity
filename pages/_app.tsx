@@ -1,13 +1,31 @@
-﻿import '../styles/globals.css';
+﻿import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
-import Layout from '../components/Layout';
+import { useEffect } from 'react';
+import Layout from '@/components/Layout';
 
-function MyApp({ Component, pageProps }: AppProps) {
+// Import Poppins font from Google Fonts
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+
+export default function App({ Component, pageProps }: AppProps) {
+  // Ensure dark mode class is set on html for persistence
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  }, []);
+
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <div className="min-h-screen w-full bg-white dark:bg-[#111827]">
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </div>
   );
 }
-
-export default MyApp;
