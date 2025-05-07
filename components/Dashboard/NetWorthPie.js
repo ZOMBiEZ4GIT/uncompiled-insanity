@@ -1,4 +1,11 @@
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 
 // To animate a pie slice and show the value inside on hover:
 // 1. Use the 'activeIndex' and 'onMouseEnter' props on <Pie> to track the hovered slice.
@@ -7,11 +14,20 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recha
 
 // Tableau 10 color palette for better distinction
 const COLORS = [
-  "#4E79A7", "#F28E2B", "#E15759", "#76B7B2", "#59A14F", "#EDC948", "#B07AA1", "#FF9DA7", "#9C755F", "#BAB0AC"
+  '#4E79A7',
+  '#F28E2B',
+  '#E15759',
+  '#76B7B2',
+  '#59A14F',
+  '#EDC948',
+  '#B07AA1',
+  '#FF9DA7',
+  '#9C755F',
+  '#BAB0AC',
 ];
 
 export default function NetWorthPie({ data, title }) {
-  const hasData = Array.isArray(data) && data.some(d => d.value > 0);
+  const hasData = Array.isArray(data) && data.some((d) => d.value > 0);
 
   return (
     <>
@@ -19,7 +35,14 @@ export default function NetWorthPie({ data, title }) {
       {hasData ? (
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
-            <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100}>
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+            >
               {data.map((_, index) => (
                 <Cell key={index} fill={COLORS[index % COLORS.length]} />
               ))}
@@ -29,7 +52,9 @@ export default function NetWorthPie({ data, title }) {
           </PieChart>
         </ResponsiveContainer>
       ) : (
-        <div className="text-gray-400 text-center py-20">No data to display</div>
+        <div className="text-gray-400 text-center py-20">
+          No data to display
+        </div>
       )}
     </>
   );

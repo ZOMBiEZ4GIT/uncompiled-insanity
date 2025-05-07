@@ -1,17 +1,44 @@
-﻿import { useEffect, useState } from "react";
-import { supabase } from "@/utils/supabaseClient";
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { v4 as uuidv4 } from "uuid";
+﻿import { useEffect, useState } from 'react';
+import { supabase } from '@/utils/supabaseClient';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
+import { v4 as uuidv4 } from 'uuid';
+
+interface BudgetItem {
+  id: string;
+  item: string;
+  category: string;
+  bank_account: string;
+  percent_allocation: number;
+  monthly_amount: number;
+  weekly_amount: number;
+  yearly_amount: number;
+}
 
 // Color palette for pie chart
 const COLORS = [
-  "#4E79A7", "#F28E2B", "#E15759", "#76B7B2", "#59A14F", "#EDC948", "#B07AA1", "#FF9DA7", "#9C755F", "#BAB0AC"
+  '#4E79A7',
+  '#F28E2B',
+  '#E15759',
+  '#76B7B2',
+  '#59A14F',
+  '#EDC948',
+  '#B07AA1',
+  '#FF9DA7',
+  '#9C755F',
+  '#BAB0AC',
 ];
 
 export default function BudgetPlayground() {
   // State for monthly income and budget items
   const [monthlyIncome, setMonthlyIncome] = useState<number>(0);
-  const [budgetItems, setBudgetItems] = useState<any[]>([]);
+  const [budgetItems, setBudgetItems] = useState<BudgetItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,14 +49,17 @@ export default function BudgetPlayground() {
     const fetchBudget = async () => {
       setLoading(true);
       setError(null);
-      const { data, error } = await supabase.from("budget_items").select("*");
+      const { data, error } = await supabase.from('budget_items').select('*');
       if (error) {
-        setError("Failed to load budget items.");
+        setError('Failed to load budget items.');
       } else {
         setBudgetItems(data || []);
         // Optionally, infer monthly income from sum of items
         if (data && data.length > 0) {
-          const total = data.reduce((sum, item) => sum + (item.monthly_amount || 0), 0);
+          const total = data.reduce(
+            (sum, item) => sum + (item.monthly_amount || 0),
+            0
+          );
           setMonthlyIncome(total);
         }
       }
@@ -39,16 +69,25 @@ export default function BudgetPlayground() {
   }, []);
 
   // Calculate total allocated and remaining
-  const totalAllocated = budgetItems.reduce((sum, item) => sum + Number(item.monthly_amount || 0), 0);
+  const totalAllocated = budgetItems.reduce(
+    (sum, item) => sum + Number(item.monthly_amount || 0),
+    0
+  );
   const remaining = monthlyIncome - totalAllocated;
 
   // Handle input changes for amount or percent
-  const handleItemChange = (idx: number, field: "monthly_amount" | "percent_allocation", value: number) => {
+  const handleItemChange = (
+    idx: number,
+    field: 'monthly_amount' | 'percent_allocation',
+    value: number
+  ) => {
     setBudgetItems((items) => {
       const updated = [...items];
-      if (field === "monthly_amount") {
+      if (field === 'monthly_amount') {
         updated[idx].monthly_amount = value;
-        updated[idx].percent_allocation = monthlyIncome ? (value / monthlyIncome) * 100 : 0;
+        updated[idx].percent_allocation = monthlyIncome
+          ? (value / monthlyIncome) * 100
+          : 0;
       } else {
         updated[idx].percent_allocation = value;
         updated[idx].monthly_amount = (monthlyIncome * value) / 100;
@@ -65,13 +104,13 @@ export default function BudgetPlayground() {
       ...items,
       {
         id: uuidv4(),
-        item: "",
+        item: '',
         percent_allocation: 0,
         monthly_amount: 0,
         weekly_amount: 0,
         yearly_amount: 0,
-        bank_account: "",
-        category: "",
+        bank_account: '',
+        category: '',
       },
     ]);
   };
@@ -87,19 +126,26 @@ export default function BudgetPlayground() {
     setError(null);
     setSuccess(null);
     // Remove empty items
-    const filtered = budgetItems.filter((item) => item.item && item.monthly_amount > 0);
+    const filtered = budgetItems.filter(
+      (item) => item.item && item.monthly_amount > 0
+    );
     // Delete all existing, then insert new
-    const { error: delError } = await supabase.from("budget_items").delete().neq("id", "");
+    const { error: delError } = await supabase
+      .from('budget_items')
+      .delete()
+      .neq('id', '');
     if (delError) {
-      setError("Failed to clear old budget items.");
+      setError('Failed to clear old budget items.');
       setSaving(false);
       return;
     }
-    const { error: insError } = await supabase.from("budget_items").insert(filtered);
+    const { error: insError } = await supabase
+      .from('budget_items')
+      .insert(filtered);
     if (insError) {
-      setError("Failed to save new budget.");
+      setError('Failed to save new budget.');
     } else {
-      setSuccess("Budget saved successfully!");
+      setSuccess('Budget saved successfully!');
     }
     setSaving(false);
   };
@@ -115,10 +161,14 @@ export default function BudgetPlayground() {
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center p-6 bg-[#111827]">
       <div className="w-full max-w-5xl bg-[#18181B] border border-zinc-800 text-white rounded-3xl shadow-2xl p-8">
-        <h1 className="text-3xl font-bold mb-6 text-accent">Budget Playground</h1>
+        <h1 className="text-3xl font-bold mb-6 text-accent">
+          Budget Playground
+        </h1>
         {/* Monthly Income Input */}
         <div className="mb-6 flex flex-col md:flex-row md:items-center gap-4">
-          <label className="font-semibold text-lg text-white">Monthly Income:</label>
+          <label className="font-semibold text-lg text-white">
+            Monthly Income:
+          </label>
           <input
             type="number"
             className="border border-zinc-700 rounded px-4 py-2 w-48 text-lg font-bold bg-[#18181B] text-white"
@@ -199,7 +249,11 @@ export default function BudgetPlayground() {
                       min={0}
                       max={100}
                       onChange={(e) =>
-                        handleItemChange(idx, "percent_allocation", Number(e.target.value))
+                        handleItemChange(
+                          idx,
+                          'percent_allocation',
+                          Number(e.target.value)
+                        )
                       }
                     />
                   </td>
@@ -210,12 +264,24 @@ export default function BudgetPlayground() {
                       value={Number(item.monthly_amount).toFixed(2)}
                       min={0}
                       onChange={(e) =>
-                        handleItemChange(idx, "monthly_amount", Number(e.target.value))
+                        handleItemChange(
+                          idx,
+                          'monthly_amount',
+                          Number(e.target.value)
+                        )
                       }
                     />
                   </td>
-                  <td className="text-right">{item.weekly_amount ? `$${item.weekly_amount.toFixed(2)}` : ""}</td>
-                  <td className="text-right">{item.yearly_amount ? `$${item.yearly_amount.toFixed(2)}` : ""}</td>
+                  <td className="text-right">
+                    {item.weekly_amount
+                      ? `$${item.weekly_amount.toFixed(2)}`
+                      : ''}
+                  </td>
+                  <td className="text-right">
+                    {item.yearly_amount
+                      ? `$${item.yearly_amount.toFixed(2)}`
+                      : ''}
+                  </td>
                   <td>
                     <button
                       className="text-red-500 font-bold px-2"
@@ -234,8 +300,16 @@ export default function BudgetPlayground() {
         <div className="flex flex-col md:flex-row items-center gap-8 mb-6">
           <div className="flex-1">
             <div className="mb-2 font-semibold text-lg text-white">
-              Remaining: {" "}
-              <span className={remaining === 0 ? "text-green-400" : remaining < 0 ? "text-red-400" : "text-yellow-400"}>
+              Remaining:{' '}
+              <span
+                className={
+                  remaining === 0
+                    ? 'text-green-400'
+                    : remaining < 0
+                      ? 'text-red-400'
+                      : 'text-yellow-400'
+                }
+              >
                 ${remaining.toFixed(2)}
               </span>
             </div>
@@ -243,10 +317,10 @@ export default function BudgetPlayground() {
               <div
                 className={`h-full transition-all duration-300 ${
                   remaining < 0
-                    ? "bg-red-500"
+                    ? 'bg-red-500'
                     : remaining === 0
-                    ? "bg-green-400"
-                    : "bg-yellow-400"
+                      ? 'bg-green-400'
+                      : 'bg-yellow-400'
                 }`}
                 style={{
                   width: `${Math.min(100, ((monthlyIncome - remaining) / monthlyIncome) * 100)}%`,
@@ -271,7 +345,14 @@ export default function BudgetPlayground() {
                     <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ background: '#18181B', color: '#fff', borderRadius: 8 }} labelStyle={{ color: '#fff' }} />
+                <Tooltip
+                  contentStyle={{
+                    background: '#18181B',
+                    color: '#fff',
+                    borderRadius: 8,
+                  }}
+                  labelStyle={{ color: '#fff' }}
+                />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
@@ -284,10 +365,12 @@ export default function BudgetPlayground() {
             onClick={handleSave}
             disabled={saving || loading}
           >
-            {saving ? "Saving..." : "Save & Commit"}
+            {saving ? 'Saving...' : 'Save & Commit'}
           </button>
           {error && <span className="text-red-400 font-semibold">{error}</span>}
-          {success && <span className="text-green-400 font-semibold">{success}</span>}
+          {success && (
+            <span className="text-green-400 font-semibold">{success}</span>
+          )}
         </div>
       </div>
     </div>

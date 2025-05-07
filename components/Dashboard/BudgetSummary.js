@@ -16,15 +16,18 @@ export default function BudgetSummary({ budgetItems, title, withBadges }) {
   // Assign a color to each unique category
   const categoryColorMap = {};
   let colorIdx = 0;
-  sortedItems.forEach(item => {
+  sortedItems.forEach((item) => {
     if (!categoryColorMap[item.category]) {
-      categoryColorMap[item.category] = badgeColors[colorIdx % badgeColors.length];
+      categoryColorMap[item.category] =
+        badgeColors[colorIdx % badgeColors.length];
       colorIdx++;
     }
   });
   return (
     <>
-      <h2 className="text-lg font-semibold mb-4 text-primary dark:text-accent">{title}</h2>
+      <h2 className="text-lg font-semibold mb-4 text-primary dark:text-accent">
+        {title}
+      </h2>
       <table className="w-full table-auto">
         <thead>
           <tr>
@@ -39,10 +42,16 @@ export default function BudgetSummary({ budgetItems, title, withBadges }) {
             <tr key={idx}>
               <td>{item.name}</td>
               <td>{Number(item.percentage).toFixed(2)}%</td>
-              <td className="font-bold text-neon dark:text-accent">${item.amount}</td>
+              <td className="font-bold text-neon dark:text-accent">
+                ${item.amount}
+              </td>
               <td>
                 {withBadges ? (
-                  <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${categoryColorMap[item.category]}`}>{item.category}</span>
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full text-xs font-bold border ${categoryColorMap[item.category]}`}
+                  >
+                    {item.category}
+                  </span>
                 ) : (
                   item.category
                 )}
