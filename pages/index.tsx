@@ -12,17 +12,39 @@ const categories = [
 ];
 
 // Add types for props
+interface AssetDataPoint {
+  date: string;
+  amount: number;
+}
+
 interface AssetData {
   title: string;
-  data: any[];
+  data: AssetDataPoint[];
   color?: string;
 }
 
+interface BudgetItem {
+  name: string;
+  percentage: number;
+  amount: number;
+  category: string;
+}
+
+interface NetWorthDatum {
+  name: string;
+  value: number;
+}
+
+interface BudgetCategory {
+  name: string;
+  value: number;
+}
+
 interface DashboardProps {
-  budgetItems: any[];
-  netWorthData: any[];
+  budgetItems: BudgetItem[];
+  netWorthData: NetWorthDatum[];
   assetsData: AssetData[];
-  budgetByCategory: any[];
+  budgetByCategory: BudgetCategory[];
 }
 
 export default function Dashboard({
@@ -74,17 +96,15 @@ export default function Dashboard({
     e.preventDefault();
     const { ticker_code, order_date, units_delta, unit_price, fee } =
       cryptoForm;
-    const { error } = await supabase
-      .from('crypto_transactions')
-      .insert([
-        {
-          ticker_code,
-          order_date,
-          units_delta: Number(units_delta),
-          unit_price: Number(unit_price),
-          fee: Number(fee),
-        },
-      ]);
+    const { error } = await supabase.from('crypto_transactions').insert([
+      {
+        ticker_code,
+        order_date,
+        units_delta: Number(units_delta),
+        unit_price: Number(unit_price),
+        fee: Number(fee),
+      },
+    ]);
     if (error) setResult({ success: false, message: error.message });
     else setResult({ success: true, message: 'Crypto transaction added!' });
     setStep('result');
@@ -92,17 +112,15 @@ export default function Dashboard({
   const handleEtfSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { ticker, order_date, units_delta, order_price, brokerage } = etfForm;
-    const { error } = await supabase
-      .from('etf_transactions')
-      .insert([
-        {
-          ticker,
-          order_date,
-          units_delta: Number(units_delta),
-          order_price: Number(order_price),
-          brokerage: Number(brokerage),
-        },
-      ]);
+    const { error } = await supabase.from('etf_transactions').insert([
+      {
+        ticker,
+        order_date,
+        units_delta: Number(units_delta),
+        order_price: Number(order_price),
+        brokerage: Number(brokerage),
+      },
+    ]);
     if (error) setResult({ success: false, message: error.message });
     else setResult({ success: true, message: 'ETF transaction added!' });
     setStep('result');
@@ -111,17 +129,15 @@ export default function Dashboard({
     e.preventDefault();
     const { ticker, purchase_date, volume, bought_price_aud, brokerage } =
       stockForm;
-    const { error } = await supabase
-      .from('stock_transactions')
-      .insert([
-        {
-          ticker,
-          purchase_date,
-          volume: Number(volume),
-          bought_price_aud: Number(bought_price_aud),
-          brokerage: Number(brokerage),
-        },
-      ]);
+    const { error } = await supabase.from('stock_transactions').insert([
+      {
+        ticker,
+        purchase_date,
+        volume: Number(volume),
+        bought_price_aud: Number(bought_price_aud),
+        brokerage: Number(brokerage),
+      },
+    ]);
     if (error) setResult({ success: false, message: error.message });
     else setResult({ success: true, message: 'Stock transaction added!' });
     setStep('result');
@@ -134,16 +150,14 @@ export default function Dashboard({
       employer_contributions,
       total_value,
     } = superForm;
-    const { error } = await supabase
-      .from('super_snapshots')
-      .insert([
-        {
-          date,
-          voluntary_contributions: Number(voluntary_contributions),
-          employer_contributions: Number(employer_contributions),
-          total_value: Number(total_value),
-        },
-      ]);
+    const { error } = await supabase.from('super_snapshots').insert([
+      {
+        date,
+        voluntary_contributions: Number(voluntary_contributions),
+        employer_contributions: Number(employer_contributions),
+        total_value: Number(total_value),
+      },
+    ]);
     if (error) setResult({ success: false, message: error.message });
     else setResult({ success: true, message: 'Super snapshot added!' });
     setStep('result');
@@ -491,19 +505,27 @@ export async function getServerSideProps() {
     .from('budget_items')
     .select('item, percent_allocation, monthly_amount, category');
 
-  const budgetItems = (rawBudgetItems ?? []).map((b: any) => ({
-    name: b.item,
-    percentage: b.percent_allocation,
-    amount: Number(b.monthly_amount),
-    category: b.category,
-  }));
+  const budgetItems = (rawBudgetItems ?? []).map(
+    (b: {
+      item: string;
+      percent_allocation: number;
+      monthly_amount: string | number;
+      category: string;
+    }) => ({
+      name: b.item,
+      percentage: b.percent_allocation,
+      amount: Number(b.monthly_amount),
+      category: b.category,
+    })
+  );
 
   const filteredBudgetItems = budgetItems.filter(
-    (item: any) => item.category && !isNaN(item.amount) && item.amount > 0
+    (item: BudgetItem) =>
+      item.category && !isNaN(item.amount) && item.amount > 0
   );
 
   const budgetByCategoryMap: Record<string, number> = {};
-  filteredBudgetItems.forEach((item: any) => {
+  filteredBudgetItems.forEach((item: BudgetItem) => {
     budgetByCategoryMap[item.category] =
       (budgetByCategoryMap[item.category] || 0) + item.amount;
   });
@@ -514,13 +536,20 @@ export async function getServerSideProps() {
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
-  const fetchData = async (table: string, dateCol: string, cols: string) => {
+  const fetchData = async (
+    table: string,
+    dateCol: string,
+    cols: string
+  ): Promise<Record<string, string | number>[]> => {
     const { data } = await supabase
       .from(table)
       .select(cols)
       .gte(dateCol, oneYearAgo.toISOString().split('T')[0])
       .order(dateCol, { ascending: true });
-    return data ?? [];
+    // Filter out any error objects or invalid records
+    return (data ?? []).filter(
+      (item) => typeof item === 'object' && item !== null && !('error' in item)
+    );
   };
 
   const [
@@ -548,16 +577,16 @@ export async function getServerSideProps() {
   ]);
 
   const accumulateTransactions = (
-    transactions: any[],
+    transactions: Record<string, number | string>[],
     dateKey: string,
     unitsKey: string,
     priceKey: string
   ) => {
     let cumulative = 0;
     return (transactions ?? []).map((tx) => ({
-      date: tx[dateKey],
+      date: String(tx[dateKey]),
       amount: parseFloat(
-        (cumulative += tx[unitsKey] * tx[priceKey]).toFixed(2)
+        (cumulative += Number(tx[unitsKey]) * Number(tx[priceKey])).toFixed(2)
       ),
     }));
   };
@@ -565,7 +594,12 @@ export async function getServerSideProps() {
   const assetsData: AssetData[] = [
     {
       title: 'Super',
-      data: (superSnapshots ?? []).map((snap: any) => ({
+      data: (
+        (superSnapshots ?? []) as unknown as {
+          date: string;
+          total_value: number;
+        }[]
+      ).map((snap) => ({
         date: snap.date,
         amount: snap.total_value,
       })),
