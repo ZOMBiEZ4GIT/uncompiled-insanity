@@ -30,7 +30,7 @@ export default function NetWorthPie({ data, title }) {
   const hasData = Array.isArray(data) && data.some((d) => d.value > 0);
 
   return (
-    <>
+    <div className="p-4 bg-white dark:bg-[#23234b] rounded-xl w-full shadow border border-slate-200 dark:border-zinc-700">
       <h2 className="text-lg font-semibold mb-4">{title}</h2>
       {hasData ? (
         <ResponsiveContainer width="100%" height={300}>
@@ -56,6 +56,6 @@ export default function NetWorthPie({ data, title }) {
           No data to display
         </div>
       )}
-    </>
+    </div>
   );
 }

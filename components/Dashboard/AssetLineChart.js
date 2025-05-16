@@ -10,7 +10,7 @@ import {
 
 export default function AssetLineChart({ data, title, color }) {
   return (
-    <>
+    <div className="p-4 bg-white dark:bg-[#23234b] rounded-xl w-full shadow border border-slate-200 dark:border-zinc-700">
       <h2 className="text-lg font-semibold mb-4 text-primary dark:text-accent">
         {title}
       </h2>
@@ -37,6 +37,6 @@ export default function AssetLineChart({ data, title, color }) {
           />
         </LineChart>
       </ResponsiveContainer>
-    </>
+    </div>
   );
 }

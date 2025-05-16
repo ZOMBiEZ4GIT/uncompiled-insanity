@@ -1,7 +1,6 @@
 ﻿import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
-import Layout from '@/components/Layout';
 
 // Import Poppins font from Google Fonts
 import '@fontsource/poppins/400.css';
@@ -22,10 +21,6 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-white dark:bg-[#111827]">
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </div>
+    <Component {...pageProps} />
   );
 }
