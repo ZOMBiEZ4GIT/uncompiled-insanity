@@ -1,6 +1,9 @@
 ﻿// pages/data-entry.tsx
 import { useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
+import CryptoForm from '@/components/forms/CryptoForm';
+import EtfForm from '@/components/forms/EtfForm';
+import StockForm from '@/components/forms/StockForm';
 
 const categories = [
   { key: 'crypto', label: 'Crypto' },
@@ -174,18 +177,18 @@ export default function DataEntry() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#111827] p-4">
-      <div className="bg-[#18181B] border border-zinc-800 text-white rounded-2xl shadow-2xl p-8 w-full max-w-md transition-all duration-500">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-earth-background text-earth p-4">
+      <div className="bg-earth-card border border-earth text-earth rounded-2xl shadow-2xl p-8 w-full max-w-md transition-all duration-500">
         {step === 'select' && (
           <div className="flex flex-col items-center">
-            <h2 className="text-2xl font-bold mb-6 text-white">
+            <h2 className="text-2xl font-bold mb-6 text-earth">
               Select Category
             </h2>
             <div className="grid grid-cols-2 gap-4 w-full">
               {categories.map((cat) => (
                 <button
                   key={cat.key}
-                  className="py-4 px-6 rounded-xl bg-accent text-white font-semibold text-lg shadow hover:bg-brand transition-all duration-200 transform hover:scale-105"
+                  className="py-4 px-6 rounded-xl bg-earth-accent text-earth font-semibold text-lg shadow hover:bg-earth-accent2 transition-all duration-200 transform hover:scale-105"
                   onClick={() => handleCategorySelect(cat.key)}
                 >
                   {cat.label}
@@ -195,234 +198,21 @@ export default function DataEntry() {
           </div>
         )}
         {step === 'form' && category === 'crypto' && (
-          <form className="space-y-4" onSubmit={handleCryptoSubmit}>
-            <h2 className="text-xl font-semibold mb-4 text-white">
-              Add Crypto Transaction
-            </h2>
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Ticker (e.g. BTC)"
-              value={cryptoForm.ticker_code}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, ticker_code: e.target.value }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              type="date"
-              value={cryptoForm.order_date}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, order_date: e.target.value }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Units"
-              type="number"
-              step="any"
-              value={cryptoForm.units_delta}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, units_delta: e.target.value }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Unit Price"
-              type="number"
-              step="any"
-              value={cryptoForm.unit_price}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, unit_price: e.target.value }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Fee"
-              type="number"
-              step="any"
-              value={cryptoForm.fee}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, fee: e.target.value }))
-              }
-              required
-            />
-            <div className="flex gap-4 mt-4">
-              <button
-                type="submit"
-                className="flex-1 py-2 rounded bg-accent text-white font-bold hover:bg-brand transition"
-              >
-                Submit
-              </button>
-              <button
-                type="button"
-                className="flex-1 py-2 rounded bg-zinc-800 text-white font-bold hover:bg-zinc-700 transition"
-                onClick={handleReset}
-              >
-                Back
-              </button>
-            </div>
-          </form>
+          <CryptoForm form={cryptoForm} setForm={setCryptoForm} onSubmit={handleCryptoSubmit} />
         )}
         {step === 'form' && category === 'etf' && (
-          <form className="space-y-4" onSubmit={handleEtfSubmit}>
-            <h2 className="text-xl font-semibold mb-4 text-white">
-              Add ETF Transaction
-            </h2>
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Ticker (e.g. VAS)"
-              value={etfForm.ticker}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, ticker: e.target.value }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              type="date"
-              value={etfForm.order_date}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, order_date: e.target.value }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Units"
-              type="number"
-              step="any"
-              value={etfForm.units_delta}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, units_delta: e.target.value }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Order Price"
-              type="number"
-              step="any"
-              value={etfForm.order_price}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, order_price: e.target.value }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Brokerage"
-              type="number"
-              step="any"
-              value={etfForm.brokerage}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, brokerage: e.target.value }))
-              }
-              required
-            />
-            <div className="flex gap-4 mt-4">
-              <button
-                type="submit"
-                className="flex-1 py-2 rounded bg-accent text-white font-bold hover:bg-brand transition"
-              >
-                Submit
-              </button>
-              <button
-                type="button"
-                className="flex-1 py-2 rounded bg-zinc-800 text-white font-bold hover:bg-zinc-700 transition"
-                onClick={handleReset}
-              >
-                Back
-              </button>
-            </div>
-          </form>
+          <EtfForm form={etfForm} setForm={setEtfForm} onSubmit={handleEtfSubmit} />
         )}
         {step === 'form' && category === 'stock' && (
-          <form className="space-y-4" onSubmit={handleStockSubmit}>
-            <h2 className="text-xl font-semibold mb-4 text-white">
-              Add Stock Transaction
-            </h2>
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Ticker (e.g. AAPL)"
-              value={stockForm.ticker}
-              onChange={(e) =>
-                setStockForm((f) => ({ ...f, ticker: e.target.value }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              type="date"
-              value={stockForm.purchase_date}
-              onChange={(e) =>
-                setStockForm((f) => ({ ...f, purchase_date: e.target.value }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Volume"
-              type="number"
-              step="any"
-              value={stockForm.volume}
-              onChange={(e) =>
-                setStockForm((f) => ({ ...f, volume: e.target.value }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Bought Price (AUD)"
-              type="number"
-              step="any"
-              value={stockForm.bought_price_aud}
-              onChange={(e) =>
-                setStockForm((f) => ({
-                  ...f,
-                  bought_price_aud: e.target.value,
-                }))
-              }
-              required
-            />
-            <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
-              placeholder="Brokerage"
-              type="number"
-              step="any"
-              value={stockForm.brokerage}
-              onChange={(e) =>
-                setStockForm((f) => ({ ...f, brokerage: e.target.value }))
-              }
-              required
-            />
-            <div className="flex gap-4 mt-4">
-              <button
-                type="submit"
-                className="flex-1 py-2 rounded bg-accent text-white font-bold hover:bg-brand transition"
-              >
-                Submit
-              </button>
-              <button
-                type="button"
-                className="flex-1 py-2 rounded bg-zinc-800 text-white font-bold hover:bg-zinc-700 transition"
-                onClick={handleReset}
-              >
-                Back
-              </button>
-            </div>
-          </form>
+          <StockForm form={stockForm} setForm={setStockForm} onSubmit={handleStockSubmit} />
         )}
         {step === 'form' && category === 'super' && (
           <form className="space-y-4" onSubmit={handleSuperSubmit}>
-            <h2 className="text-xl font-semibold mb-4 text-white">
+            <h2 className="text-xl font-semibold mb-4 text-earth">
               Add Super Snapshot
             </h2>
             <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
+              className="w-full border border-earth rounded p-2 bg-earth-background text-earth"
               type="date"
               value={superForm.date}
               onChange={(e) =>
@@ -431,7 +221,7 @@ export default function DataEntry() {
               required
             />
             <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
+              className="w-full border border-earth rounded p-2 bg-earth-background text-earth"
               placeholder="Voluntary Contributions"
               type="number"
               step="any"
@@ -445,7 +235,7 @@ export default function DataEntry() {
               required
             />
             <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
+              className="w-full border border-earth rounded p-2 bg-earth-background text-earth"
               placeholder="Employer Contributions"
               type="number"
               step="any"
@@ -459,7 +249,7 @@ export default function DataEntry() {
               required
             />
             <input
-              className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
+              className="w-full border border-earth rounded p-2 bg-earth-background text-earth"
               placeholder="Total Value"
               type="number"
               step="any"
@@ -472,13 +262,13 @@ export default function DataEntry() {
             <div className="flex gap-4 mt-4">
               <button
                 type="submit"
-                className="flex-1 py-2 rounded bg-accent text-white font-bold hover:bg-brand transition"
+                className="flex-1 py-2 rounded bg-earth-accent text-earth font-bold hover:bg-earth-accent2 transition"
               >
                 Submit
               </button>
               <button
                 type="button"
-                className="flex-1 py-2 rounded bg-zinc-800 text-white font-bold hover:bg-zinc-700 transition"
+                className="flex-1 py-2 rounded bg-earth-card text-earth font-bold hover:bg-earth-accent3 transition"
                 onClick={handleReset}
               >
                 Back
@@ -495,7 +285,7 @@ export default function DataEntry() {
             </h2>
             <p className="mb-6">{result.message}</p>
             <button
-              className="py-2 px-6 rounded bg-accent text-white font-bold hover:bg-brand transition"
+              className="py-2 px-6 rounded bg-earth-accent text-earth font-bold hover:bg-earth-accent2 transition"
               onClick={handleReset}
             >
               Add Another

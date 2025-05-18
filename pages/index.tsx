@@ -2,6 +2,9 @@
 import BudgetSummary from '@/components/Dashboard/BudgetSummary';
 import NetWorthPie from '@/components/Dashboard/NetWorthPie';
 import AssetLineChart from '@/components/Dashboard/AssetLineChart';
+import CryptoForm from '@/components/forms/CryptoForm';
+import EtfForm from '@/components/forms/EtfForm';
+import StockForm from '@/components/forms/StockForm';
 import { supabase } from '@/utils/supabaseClient';
 
 const categories = [
@@ -197,8 +200,8 @@ export default function Dashboard({
   };
 
   return (
-    <main className="min-h-screen w-full flex flex-col items-center bg-earth-background text-earth py-10 px-2">
-      <div className="w-full flex flex-row gap-12 px-2">
+    <main className="min-h-screen w-full flex flex-col items-center bg-earth-background text-earth py-10 px-4 lg:px-8">
+      <div className="w-full max-w-screen-2xl mx-auto flex flex-row gap-12 px-2 lg:px-6">
         {/* Sidebar: Budget Summary */}
         <aside className="hidden xl:flex flex-col w-[340px] min-w-[300px] max-w-[380px] h-[calc(100vh-60px)] sticky top-8 bg-earth-card rounded-2xl shadow-2xl p-6 mr-8 border border-earth text-earth">
           <div className="sticky top-0 z-10 bg-earth-card pb-2">
@@ -361,193 +364,25 @@ export default function Dashboard({
                 </div>
               )}
               {step === 'form' && category === 'crypto' && (
-                <form
-                  className="space-y-3 w-full max-w-md mx-auto"
+                <CryptoForm
+                  form={cryptoForm}
+                  setForm={setCryptoForm}
                   onSubmit={handleCryptoSubmit}
-                >
-                  <h3 className="text-base font-semibold mb-1 text-earth-primary">
-                    Add Crypto Transaction
-                  </h3>
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Ticker Code"
-                    value={cryptoForm.ticker_code}
-                    onChange={(e) =>
-                      setCryptoForm((f) => ({
-                        ...f,
-                        ticker_code: e.target.value,
-                      }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Order Date"
-                    type="date"
-                    value={cryptoForm.order_date}
-                    onChange={(e) =>
-                      setCryptoForm((f) => ({
-                        ...f,
-                        order_date: e.target.value,
-                      }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Units Delta"
-                    value={cryptoForm.units_delta}
-                    onChange={(e) =>
-                      setCryptoForm((f) => ({
-                        ...f,
-                        units_delta: e.target.value,
-                      }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Unit Price"
-                    value={cryptoForm.unit_price}
-                    onChange={(e) =>
-                      setCryptoForm((f) => ({
-                        ...f,
-                        unit_price: e.target.value,
-                      }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Fee"
-                    value={cryptoForm.fee}
-                    onChange={(e) =>
-                      setCryptoForm((f) => ({ ...f, fee: e.target.value }))
-                    }
-                  />
-                  <button
-                    className="w-full mt-2 py-2 px-4 rounded bg-earth-accent text-earth font-bold hover:bg-earth-accent2 transition"
-                    type="submit"
-                  >
-                    Add
-                  </button>
-                </form>
+                />
               )}
               {step === 'form' && category === 'etf' && (
-                <form
-                  className="space-y-3 w-full max-w-md mx-auto"
+                <EtfForm
+                  form={etfForm}
+                  setForm={setEtfForm}
                   onSubmit={handleEtfSubmit}
-                >
-                  <h3 className="text-base font-semibold mb-1 text-earth-primary">
-                    Add ETF Transaction
-                  </h3>
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Ticker"
-                    value={etfForm.ticker}
-                    onChange={(e) =>
-                      setEtfForm((f) => ({ ...f, ticker: e.target.value }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Order Date"
-                    type="date"
-                    value={etfForm.order_date}
-                    onChange={(e) =>
-                      setEtfForm((f) => ({ ...f, order_date: e.target.value }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Units Delta"
-                    value={etfForm.units_delta}
-                    onChange={(e) =>
-                      setEtfForm((f) => ({ ...f, units_delta: e.target.value }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Order Price"
-                    value={etfForm.order_price}
-                    onChange={(e) =>
-                      setEtfForm((f) => ({ ...f, order_price: e.target.value }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Brokerage"
-                    value={etfForm.brokerage}
-                    onChange={(e) =>
-                      setEtfForm((f) => ({ ...f, brokerage: e.target.value }))
-                    }
-                  />
-                  <button
-                    className="w-full mt-2 py-2 px-4 rounded bg-earth-accent text-earth font-bold hover:bg-earth-accent2 transition"
-                    type="submit"
-                  >
-                    Add
-                  </button>
-                </form>
+                />
               )}
               {step === 'form' && category === 'stock' && (
-                <form
-                  className="space-y-3 w-full max-w-md mx-auto"
+                <StockForm
+                  form={stockForm}
+                  setForm={setStockForm}
                   onSubmit={handleStockSubmit}
-                >
-                  <h3 className="text-base font-semibold mb-1 text-earth-primary">
-                    Add Stock Transaction
-                  </h3>
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Ticker"
-                    value={stockForm.ticker}
-                    onChange={(e) =>
-                      setStockForm((f) => ({ ...f, ticker: e.target.value }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Purchase Date"
-                    type="date"
-                    value={stockForm.purchase_date}
-                    onChange={(e) =>
-                      setStockForm((f) => ({
-                        ...f,
-                        purchase_date: e.target.value,
-                      }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Volume"
-                    value={stockForm.volume}
-                    onChange={(e) =>
-                      setStockForm((f) => ({ ...f, volume: e.target.value }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Bought Price (AUD)"
-                    value={stockForm.bought_price_aud}
-                    onChange={(e) =>
-                      setStockForm((f) => ({
-                        ...f,
-                        bought_price_aud: e.target.value,
-                      }))
-                    }
-                  />
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    placeholder="Brokerage"
-                    value={stockForm.brokerage}
-                    onChange={(e) =>
-                      setStockForm((f) => ({ ...f, brokerage: e.target.value }))
-                    }
-                  />
-                  <button
-                    className="w-full mt-2 py-2 px-4 rounded bg-earth-accent text-earth font-bold hover:bg-earth-accent2 transition"
-                    type="submit"
-                  >
-                    Add
-                  </button>
-                </form>
+                />
               )}
               {step === 'result' && result && (
                 <div

@@ -22,6 +22,18 @@ The **Personal Financial Tracker** is an intuitive web application designed to c
 
 ---
 
+## 🎨 Dashboard UI/UX Vision
+
+Our goal is a sleek, minimal dashboard that fills a full monitor while remaining easy to scan. Key design aspects include:
+
+- **Unified Earth Tone Palette:** Apply the warm beige and brown variables across navigation, headers, footers, and all interactive elements for a cohesive feel.
+- **Responsive Full-Width Layout:** The main grid scales smoothly on large screens with a sticky sidebar and generous spacing.
+- **Consistent Card Components:** Charts and forms share the same rounded card styling and soft shadows.
+- **Clear Typography:** The Outfit font family with thoughtful padding creates a readable hierarchy.
+- **Subtle Interactions:** Hover transitions and gentle shadows add depth without clutter.
+
+---
+
 ## 🔧 Technical Stack
 
 ### Frontend
