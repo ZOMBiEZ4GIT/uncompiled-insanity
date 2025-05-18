@@ -7,8 +7,8 @@ html,
 body {
   font-family: 'Poppins', 'Inter', ui-sans-serif, system-ui, sans-serif;
   min-height: 100vh;
-  background: #f8fafc;
-  color: #222;
+  /* background: #f8fafc; */
+  /* color: #222; */
   transition:
     background 0.3s,
     color 0.3s;
@@ -25,3 +25,27 @@ body {
   background: #38bdf8;
   color: #fff;
 }
+
+:root {
+  --color-background: #F5F3EE; /* very light warm beige */
+  --color-card: #E5DFD6;      /* lighter beige for cards */
+  --color-primary: #A68A64;   /* ochre/gold */
+  --color-accent: #6B7A4B;    /* olive green */
+  --color-accent2: #B86B4B;   /* clay/terracotta */
+  --color-accent3: #A3A380;   /* muted olive/grey */
+  --color-border: #CFC6B2;    /* soft clay border */
+  --color-text: #3E2C18;      /* deep brown */
+}
+
+.bg-earth-background { background: var(--color-background) !important; }
+.bg-earth-card { background: var(--color-card) !important; }
+.text-earth { color: var(--color-text) !important; }
+.text-earth-primary { color: var(--color-primary) !important; }
+.text-earth-accent { color: var(--color-accent) !important; }
+.text-earth-accent2 { color: var(--color-accent2) !important; }
+.text-earth-accent3 { color: var(--color-accent3) !important; }
+.border-earth { border-color: var(--color-border) !important; }
+.bg-earth-accent { background: var(--color-accent) !important; }
+.bg-earth-accent2 { background: var(--color-accent2) !important; }
+.bg-earth-accent3 { background: var(--color-accent3) !important; }
+.bg-earth-primary { background: var(--color-primary) !important; }

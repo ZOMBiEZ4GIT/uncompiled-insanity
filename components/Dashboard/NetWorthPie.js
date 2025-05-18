@@ -7,33 +7,30 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-// To animate a pie slice and show the value inside on hover:
-// 1. Use the 'activeIndex' and 'onMouseEnter' props on <Pie> to track the hovered slice.
-// 2. Use the 'activeShape' prop to render a custom shape for the active slice (e.g., make it larger and display the value inside).
-// 3. See Recharts docs: https://recharts.org/en-US/examples/CustomizedActiveShapePieChart
-
-// Tableau 10 color palette for better distinction
+// Modern color palette with better contrast and accessibility
 const COLORS = [
-  '#4E79A7',
-  '#F28E2B',
-  '#E15759',
-  '#76B7B2',
-  '#59A14F',
-  '#EDC948',
-  '#B07AA1',
-  '#FF9DA7',
-  '#9C755F',
-  '#BAB0AC',
+  '#6366F1', // Indigo
+  '#10B981', // Emerald
+  '#EC4899', // Pink
+  '#F59E0B', // Amber
+  '#3B82F6', // Blue
+  '#8B5CF6', // Purple
+  '#14B8A6', // Teal
+  '#F43F5E', // Rose
+  '#84CC16', // Lime
+  '#06B6D4', // Cyan
 ];
 
 export default function NetWorthPie({ data, title }) {
   const hasData = Array.isArray(data) && data.some((d) => d.value > 0);
 
   return (
-    <div className="p-4 bg-white dark:bg-[#23234b] rounded-xl w-full shadow border border-slate-200 dark:border-zinc-700">
-      <h2 className="text-lg font-semibold mb-4">{title}</h2>
+    <div className="p-6 bg-earth-card rounded-xl w-full shadow-card hover:shadow-card-hover transition-shadow duration-300 border border-earth">
+      <h2 className="text-xl font-display font-semibold mb-6 text-earth-primary">
+        {title}
+      </h2>
       {hasData ? (
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={350}>
           <PieChart>
             <Pie
               data={data}
@@ -41,18 +38,41 @@ export default function NetWorthPie({ data, title }) {
               nameKey="name"
               cx="50%"
               cy="50%"
-              outerRadius={100}
+              outerRadius={120}
+              innerRadius={60}
+              paddingAngle={2}
             >
               {data.map((_, index) => (
-                <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                <Cell 
+                  key={index} 
+                  fill={COLORS[index % COLORS.length]}
+                  stroke="white"
+                  strokeWidth={2}
+                />
               ))}
             </Pie>
-            <Tooltip />
-            <Legend />
+            <Tooltip
+              contentStyle={{
+                background: 'rgba(31, 41, 55, 0.95)',
+                color: '#fff',
+                borderRadius: 8,
+                border: 'none',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              }}
+              labelStyle={{ color: '#fff', fontWeight: 500 }}
+            />
+            <Legend 
+              layout="horizontal" 
+              verticalAlign="bottom" 
+              align="center"
+              wrapperStyle={{
+                paddingTop: '20px',
+              }}
+            />
           </PieChart>
         </ResponsiveContainer>
       ) : (
-        <div className="text-gray-400 text-center py-20">
+        <div className="text-gray-400 text-center py-20 font-medium">
           No data to display
         </div>
       )}
