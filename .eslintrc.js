@@ -1,6 +1,5 @@
 // .eslintrc.js
 module.exports = {
-  root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 2021,
