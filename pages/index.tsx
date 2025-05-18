@@ -88,10 +88,15 @@ export default function Dashboard({
     cash_savings: '',
     debt_amount: '',
   });
-  const [checkinResult, setCheckinResult] = useState<null | { success: boolean; message: string }>(null);
+  const [checkinResult, setCheckinResult] = useState<null | {
+    success: boolean;
+    message: string;
+  }>(null);
   // Add state for collapsible Budget Summary
   const [budgetCollapsed, setBudgetCollapsed] = useState(true);
-  const visibleBudgetItems = budgetCollapsed ? budgetItems.slice(0, 5) : budgetItems;
+  const visibleBudgetItems = budgetCollapsed
+    ? budgetItems.slice(0, 5)
+    : budgetItems;
 
   const handleCategorySelect = (cat: string) => {
     setCategory(cat);
@@ -175,7 +180,8 @@ export default function Dashboard({
   };
   const handleCheckinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { super_amount, date, super_type, cash_savings, debt_amount } = checkinForm;
+    const { super_amount, date, super_type, cash_savings, debt_amount } =
+      checkinForm;
     const { error } = await supabase.from('monthly_checkins').insert([
       {
         super_amount: Number(super_amount),
@@ -186,7 +192,8 @@ export default function Dashboard({
       },
     ]);
     if (error) setCheckinResult({ success: false, message: error.message });
-    else setCheckinResult({ success: true, message: 'Monthly check-in saved!' });
+    else
+      setCheckinResult({ success: true, message: 'Monthly check-in saved!' });
   };
 
   return (
@@ -238,50 +245,85 @@ export default function Dashboard({
               <h2 className="text-xl font-bold mb-4 text-earth-accent text-center flex items-center gap-2">
                 Monthly Check-in
               </h2>
-              <form className="space-y-3 w-full max-w-lg mx-auto" onSubmit={handleCheckinSubmit}>
-                <label className="block text-earth-primary font-semibold">Super Amount</label>
+              <form
+                className="space-y-3 w-full max-w-lg mx-auto"
+                onSubmit={handleCheckinSubmit}
+              >
+                <label className="block text-earth-primary font-semibold">
+                  Super Amount
+                </label>
                 <input
                   className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                   type="number"
                   placeholder="Super Amount"
                   value={checkinForm.super_amount}
-                  onChange={e => setCheckinForm(f => ({ ...f, super_amount: e.target.value }))}
+                  onChange={(e) =>
+                    setCheckinForm((f) => ({
+                      ...f,
+                      super_amount: e.target.value,
+                    }))
+                  }
                   required
                 />
-                <label className="block text-earth-primary font-semibold">Date</label>
+                <label className="block text-earth-primary font-semibold">
+                  Date
+                </label>
                 <input
                   className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                   type="date"
                   value={checkinForm.date}
-                  onChange={e => setCheckinForm(f => ({ ...f, date: e.target.value }))}
+                  onChange={(e) =>
+                    setCheckinForm((f) => ({ ...f, date: e.target.value }))
+                  }
                   required
                 />
-                <label className="block text-earth-primary font-semibold">Super Type</label>
+                <label className="block text-earth-primary font-semibold">
+                  Super Type
+                </label>
                 <select
                   className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                   value={checkinForm.super_type}
-                  onChange={e => setCheckinForm(f => ({ ...f, super_type: e.target.value }))}
+                  onChange={(e) =>
+                    setCheckinForm((f) => ({
+                      ...f,
+                      super_type: e.target.value,
+                    }))
+                  }
                   required
                 >
                   <option value="voluntary">Voluntary</option>
                   <option value="compulsory">Compulsory</option>
                 </select>
-                <label className="block text-earth-primary font-semibold">Current Cash Savings</label>
+                <label className="block text-earth-primary font-semibold">
+                  Current Cash Savings
+                </label>
                 <input
                   className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                   type="number"
                   placeholder="Cash Savings"
                   value={checkinForm.cash_savings}
-                  onChange={e => setCheckinForm(f => ({ ...f, cash_savings: e.target.value }))}
+                  onChange={(e) =>
+                    setCheckinForm((f) => ({
+                      ...f,
+                      cash_savings: e.target.value,
+                    }))
+                  }
                   required
                 />
-                <label className="block text-earth-primary font-semibold">Current Debt Amount</label>
+                <label className="block text-earth-primary font-semibold">
+                  Current Debt Amount
+                </label>
                 <input
                   className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                   type="number"
                   placeholder="Debt Amount"
                   value={checkinForm.debt_amount}
-                  onChange={e => setCheckinForm(f => ({ ...f, debt_amount: e.target.value }))}
+                  onChange={(e) =>
+                    setCheckinForm((f) => ({
+                      ...f,
+                      debt_amount: e.target.value,
+                    }))
+                  }
                   required
                 />
                 <button
@@ -291,7 +333,11 @@ export default function Dashboard({
                   Save Check-in
                 </button>
                 {checkinResult && (
-                  <div className={`p-2 rounded mt-2 text-center ${checkinResult.success ? 'bg-earth-accent2' : 'bg-earth-accent2'} text-earth`}>{checkinResult.message}</div>
+                  <div
+                    className={`p-2 rounded mt-2 text-center ${checkinResult.success ? 'bg-earth-accent2' : 'bg-earth-accent2'} text-earth`}
+                  >
+                    {checkinResult.message}
+                  </div>
                 )}
               </form>
             </div>
@@ -327,7 +373,10 @@ export default function Dashboard({
                     placeholder="Ticker Code"
                     value={cryptoForm.ticker_code}
                     onChange={(e) =>
-                      setCryptoForm((f) => ({ ...f, ticker_code: e.target.value }))
+                      setCryptoForm((f) => ({
+                        ...f,
+                        ticker_code: e.target.value,
+                      }))
                     }
                   />
                   <input
@@ -336,7 +385,10 @@ export default function Dashboard({
                     type="date"
                     value={cryptoForm.order_date}
                     onChange={(e) =>
-                      setCryptoForm((f) => ({ ...f, order_date: e.target.value }))
+                      setCryptoForm((f) => ({
+                        ...f,
+                        order_date: e.target.value,
+                      }))
                     }
                   />
                   <input
@@ -344,7 +396,10 @@ export default function Dashboard({
                     placeholder="Units Delta"
                     value={cryptoForm.units_delta}
                     onChange={(e) =>
-                      setCryptoForm((f) => ({ ...f, units_delta: e.target.value }))
+                      setCryptoForm((f) => ({
+                        ...f,
+                        units_delta: e.target.value,
+                      }))
                     }
                   />
                   <input
@@ -352,7 +407,10 @@ export default function Dashboard({
                     placeholder="Unit Price"
                     value={cryptoForm.unit_price}
                     onChange={(e) =>
-                      setCryptoForm((f) => ({ ...f, unit_price: e.target.value }))
+                      setCryptoForm((f) => ({
+                        ...f,
+                        unit_price: e.target.value,
+                      }))
                     }
                   />
                   <input
@@ -450,7 +508,10 @@ export default function Dashboard({
                     type="date"
                     value={stockForm.purchase_date}
                     onChange={(e) =>
-                      setStockForm((f) => ({ ...f, purchase_date: e.target.value }))
+                      setStockForm((f) => ({
+                        ...f,
+                        purchase_date: e.target.value,
+                      }))
                     }
                   />
                   <input
@@ -538,7 +599,7 @@ export async function getServerSideProps() {
     .from('information_schema.tables')
     .select('table_name')
     .eq('table_schema', 'public');
-  
+
   console.log('Available tables:', tables);
   console.log('Tables error:', tablesError);
 
@@ -549,7 +610,7 @@ export async function getServerSideProps() {
     supabase.from('super_snapshots').select('count'),
     supabase.from('crypto_transactions').select('count'),
     supabase.from('etf_transactions').select('count'),
-    supabase.from('stock_transactions').select('count')
+    supabase.from('stock_transactions').select('count'),
   ];
 
   const testResults = await Promise.all(testQueries);
@@ -558,7 +619,7 @@ export async function getServerSideProps() {
     super_snapshots: testResults[1].data,
     crypto_transactions: testResults[2].data,
     etf_transactions: testResults[3].data,
-    stock_transactions: testResults[4].data
+    stock_transactions: testResults[4].data,
   });
 
   // Helper function to accumulate transaction values
@@ -586,7 +647,7 @@ export async function getServerSideProps() {
     { data: superSnapshots, error: superError },
     { data: cryptoTransactions, error: cryptoError },
     { data: etfTransactions, error: etfError },
-    { data: stockTransactions, error: stockError }
+    { data: stockTransactions, error: stockError },
   ] = await Promise.all([
     supabase
       .from('budget_items')
@@ -606,16 +667,22 @@ export async function getServerSideProps() {
     supabase
       .from('stock_transactions')
       .select('purchase_date, volume, bought_price_aud')
-      .order('purchase_date', { ascending: true })
+      .order('purchase_date', { ascending: true }),
   ]);
 
   // Log raw data and any errors
   console.log('\n=== Raw Data from Database ===');
   console.log('Budget Items:', JSON.stringify(rawBudgetItems, null, 2));
   console.log('Super Snapshots:', JSON.stringify(superSnapshots, null, 2));
-  console.log('Crypto Transactions:', JSON.stringify(cryptoTransactions, null, 2));
+  console.log(
+    'Crypto Transactions:',
+    JSON.stringify(cryptoTransactions, null, 2)
+  );
   console.log('ETF Transactions:', JSON.stringify(etfTransactions, null, 2));
-  console.log('Stock Transactions:', JSON.stringify(stockTransactions, null, 2));
+  console.log(
+    'Stock Transactions:',
+    JSON.stringify(stockTransactions, null, 2)
+  );
 
   console.log('\n=== Any Errors ===');
   if (budgetError) console.error('Budget items error:', budgetError);
@@ -639,13 +706,19 @@ export async function getServerSideProps() {
       category: b.category,
     })
   );
-  console.log('Transformed budget items:', JSON.stringify(budgetItems, null, 2));
+  console.log(
+    'Transformed budget items:',
+    JSON.stringify(budgetItems, null, 2)
+  );
 
   const filteredBudgetItems = budgetItems.filter(
     (item: BudgetItem) =>
       item.category && !isNaN(item.amount) && item.amount > 0
   );
-  console.log('Filtered budget items:', JSON.stringify(filteredBudgetItems, null, 2));
+  console.log(
+    'Filtered budget items:',
+    JSON.stringify(filteredBudgetItems, null, 2)
+  );
 
   const budgetByCategoryMap: Record<string, number> = {};
   filteredBudgetItems.forEach((item: BudgetItem) => {

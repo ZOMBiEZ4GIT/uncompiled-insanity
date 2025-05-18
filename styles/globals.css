@@ -27,25 +27,49 @@ body {
 }
 
 :root {
-  --color-background: #F5F3EE; /* very light warm beige */
-  --color-card: #E5DFD6;      /* lighter beige for cards */
-  --color-primary: #A68A64;   /* ochre/gold */
-  --color-accent: #6B7A4B;    /* olive green */
-  --color-accent2: #B86B4B;   /* clay/terracotta */
-  --color-accent3: #A3A380;   /* muted olive/grey */
-  --color-border: #CFC6B2;    /* soft clay border */
-  --color-text: #3E2C18;      /* deep brown */
+  --color-background: #f5f3ee; /* very light warm beige */
+  --color-card: #e5dfd6; /* lighter beige for cards */
+  --color-primary: #a68a64; /* ochre/gold */
+  --color-accent: #6b7a4b; /* olive green */
+  --color-accent2: #b86b4b; /* clay/terracotta */
+  --color-accent3: #a3a380; /* muted olive/grey */
+  --color-border: #cfc6b2; /* soft clay border */
+  --color-text: #3e2c18; /* deep brown */
 }
 
-.bg-earth-background { background: var(--color-background) !important; }
-.bg-earth-card { background: var(--color-card) !important; }
-.text-earth { color: var(--color-text) !important; }
-.text-earth-primary { color: var(--color-primary) !important; }
-.text-earth-accent { color: var(--color-accent) !important; }
-.text-earth-accent2 { color: var(--color-accent2) !important; }
-.text-earth-accent3 { color: var(--color-accent3) !important; }
-.border-earth { border-color: var(--color-border) !important; }
-.bg-earth-accent { background: var(--color-accent) !important; }
-.bg-earth-accent2 { background: var(--color-accent2) !important; }
-.bg-earth-accent3 { background: var(--color-accent3) !important; }
-.bg-earth-primary { background: var(--color-primary) !important; }
+.bg-earth-background {
+  background: var(--color-background) !important;
+}
+.bg-earth-card {
+  background: var(--color-card) !important;
+}
+.text-earth {
+  color: var(--color-text) !important;
+}
+.text-earth-primary {
+  color: var(--color-primary) !important;
+}
+.text-earth-accent {
+  color: var(--color-accent) !important;
+}
+.text-earth-accent2 {
+  color: var(--color-accent2) !important;
+}
+.text-earth-accent3 {
+  color: var(--color-accent3) !important;
+}
+.border-earth {
+  border-color: var(--color-border) !important;
+}
+.bg-earth-accent {
+  background: var(--color-accent) !important;
+}
+.bg-earth-accent2 {
+  background: var(--color-accent2) !important;
+}
+.bg-earth-accent3 {
+  background: var(--color-accent3) !important;
+}
+.bg-earth-primary {
+  background: var(--color-primary) !important;
+}

@@ -16,16 +16,19 @@ export default function AssetLineChart({ data, title, color }) {
         {title}
       </h2>
       <ResponsiveContainer width="100%" height={250}>
-        <LineChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
+        <LineChart
+          data={data}
+          margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+        >
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
-          <XAxis 
-            dataKey="date" 
-            stroke="#6B7280" 
+          <XAxis
+            dataKey="date"
+            stroke="#6B7280"
             className="text-xs"
             tick={{ fill: '#6B7280' }}
           />
-          <YAxis 
-            stroke="#6B7280" 
+          <YAxis
+            stroke="#6B7280"
             className="text-xs"
             tick={{ fill: '#6B7280' }}
           />

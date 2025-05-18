@@ -43,8 +43,8 @@ export default function NetWorthPie({ data, title }) {
               paddingAngle={2}
             >
               {data.map((_, index) => (
-                <Cell 
-                  key={index} 
+                <Cell
+                  key={index}
                   fill={COLORS[index % COLORS.length]}
                   stroke="white"
                   strokeWidth={2}
@@ -61,9 +61,9 @@ export default function NetWorthPie({ data, title }) {
               }}
               labelStyle={{ color: '#fff', fontWeight: 500 }}
             />
-            <Legend 
-              layout="horizontal" 
-              verticalAlign="bottom" 
+            <Legend
+              layout="horizontal"
+              verticalAlign="bottom"
               align="center"
               wrapperStyle={{
                 paddingTop: '20px',
