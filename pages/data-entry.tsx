@@ -55,8 +55,7 @@ export default function DataEntry() {
   // Handle form submits
   const handleCryptoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { ticker_code, order_date, units_delta, unit_price, fee } =
-      cryptoForm;
+    const { ticker_code, order_date, units_delta, unit_price, fee } = cryptoForm;
     const { error } = await supabase.from('crypto_transactions').insert([
       {
         ticker_code,
@@ -96,8 +95,7 @@ export default function DataEntry() {
 
   const handleStockSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { ticker, purchase_date, volume, bought_price_aud, brokerage } =
-      stockForm;
+    const { ticker, purchase_date, volume, bought_price_aud, brokerage } = stockForm;
     const { error } = await supabase.from('stock_transactions').insert([
       {
         ticker,
@@ -117,12 +115,7 @@ export default function DataEntry() {
 
   const handleSuperSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const {
-      date,
-      voluntary_contributions,
-      employer_contributions,
-      total_value,
-    } = superForm;
+    const { date, voluntary_contributions, employer_contributions, total_value } = superForm;
     const { error } = await supabase.from('super_snapshots').insert([
       {
         date,
@@ -178,9 +171,7 @@ export default function DataEntry() {
       <div className="bg-[#18181B] border border-zinc-800 text-white rounded-2xl shadow-2xl p-8 w-full max-w-md transition-all duration-500">
         {step === 'select' && (
           <div className="flex flex-col items-center">
-            <h2 className="text-2xl font-bold mb-6 text-white">
-              Select Category
-            </h2>
+            <h2 className="text-2xl font-bold mb-6 text-white">Select Category</h2>
             <div className="grid grid-cols-2 gap-4 w-full">
               {categories.map((cat) => (
                 <button
@@ -196,25 +187,19 @@ export default function DataEntry() {
         )}
         {step === 'form' && category === 'crypto' && (
           <form className="space-y-4" onSubmit={handleCryptoSubmit}>
-            <h2 className="text-xl font-semibold mb-4 text-white">
-              Add Crypto Transaction
-            </h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">Add Crypto Transaction</h2>
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               placeholder="Ticker (e.g. BTC)"
               value={cryptoForm.ticker_code}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, ticker_code: e.target.value }))
-              }
+              onChange={(e) => setCryptoForm((f) => ({ ...f, ticker_code: e.target.value }))}
               required
             />
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               type="date"
               value={cryptoForm.order_date}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, order_date: e.target.value }))
-              }
+              onChange={(e) => setCryptoForm((f) => ({ ...f, order_date: e.target.value }))}
               required
             />
             <input
@@ -223,9 +208,7 @@ export default function DataEntry() {
               type="number"
               step="any"
               value={cryptoForm.units_delta}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, units_delta: e.target.value }))
-              }
+              onChange={(e) => setCryptoForm((f) => ({ ...f, units_delta: e.target.value }))}
               required
             />
             <input
@@ -234,9 +217,7 @@ export default function DataEntry() {
               type="number"
               step="any"
               value={cryptoForm.unit_price}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, unit_price: e.target.value }))
-              }
+              onChange={(e) => setCryptoForm((f) => ({ ...f, unit_price: e.target.value }))}
               required
             />
             <input
@@ -245,9 +226,7 @@ export default function DataEntry() {
               type="number"
               step="any"
               value={cryptoForm.fee}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, fee: e.target.value }))
-              }
+              onChange={(e) => setCryptoForm((f) => ({ ...f, fee: e.target.value }))}
               required
             />
             <div className="flex gap-4 mt-4">
@@ -269,25 +248,19 @@ export default function DataEntry() {
         )}
         {step === 'form' && category === 'etf' && (
           <form className="space-y-4" onSubmit={handleEtfSubmit}>
-            <h2 className="text-xl font-semibold mb-4 text-white">
-              Add ETF Transaction
-            </h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">Add ETF Transaction</h2>
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               placeholder="Ticker (e.g. VAS)"
               value={etfForm.ticker}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, ticker: e.target.value }))
-              }
+              onChange={(e) => setEtfForm((f) => ({ ...f, ticker: e.target.value }))}
               required
             />
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               type="date"
               value={etfForm.order_date}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, order_date: e.target.value }))
-              }
+              onChange={(e) => setEtfForm((f) => ({ ...f, order_date: e.target.value }))}
               required
             />
             <input
@@ -296,9 +269,7 @@ export default function DataEntry() {
               type="number"
               step="any"
               value={etfForm.units_delta}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, units_delta: e.target.value }))
-              }
+              onChange={(e) => setEtfForm((f) => ({ ...f, units_delta: e.target.value }))}
               required
             />
             <input
@@ -307,9 +278,7 @@ export default function DataEntry() {
               type="number"
               step="any"
               value={etfForm.order_price}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, order_price: e.target.value }))
-              }
+              onChange={(e) => setEtfForm((f) => ({ ...f, order_price: e.target.value }))}
               required
             />
             <input
@@ -318,9 +287,7 @@ export default function DataEntry() {
               type="number"
               step="any"
               value={etfForm.brokerage}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, brokerage: e.target.value }))
-              }
+              onChange={(e) => setEtfForm((f) => ({ ...f, brokerage: e.target.value }))}
               required
             />
             <div className="flex gap-4 mt-4">
@@ -342,25 +309,19 @@ export default function DataEntry() {
         )}
         {step === 'form' && category === 'stock' && (
           <form className="space-y-4" onSubmit={handleStockSubmit}>
-            <h2 className="text-xl font-semibold mb-4 text-white">
-              Add Stock Transaction
-            </h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">Add Stock Transaction</h2>
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               placeholder="Ticker (e.g. AAPL)"
               value={stockForm.ticker}
-              onChange={(e) =>
-                setStockForm((f) => ({ ...f, ticker: e.target.value }))
-              }
+              onChange={(e) => setStockForm((f) => ({ ...f, ticker: e.target.value }))}
               required
             />
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               type="date"
               value={stockForm.purchase_date}
-              onChange={(e) =>
-                setStockForm((f) => ({ ...f, purchase_date: e.target.value }))
-              }
+              onChange={(e) => setStockForm((f) => ({ ...f, purchase_date: e.target.value }))}
               required
             />
             <input
@@ -369,9 +330,7 @@ export default function DataEntry() {
               type="number"
               step="any"
               value={stockForm.volume}
-              onChange={(e) =>
-                setStockForm((f) => ({ ...f, volume: e.target.value }))
-              }
+              onChange={(e) => setStockForm((f) => ({ ...f, volume: e.target.value }))}
               required
             />
             <input
@@ -394,9 +353,7 @@ export default function DataEntry() {
               type="number"
               step="any"
               value={stockForm.brokerage}
-              onChange={(e) =>
-                setStockForm((f) => ({ ...f, brokerage: e.target.value }))
-              }
+              onChange={(e) => setStockForm((f) => ({ ...f, brokerage: e.target.value }))}
               required
             />
             <div className="flex gap-4 mt-4">
@@ -418,16 +375,12 @@ export default function DataEntry() {
         )}
         {step === 'form' && category === 'super' && (
           <form className="space-y-4" onSubmit={handleSuperSubmit}>
-            <h2 className="text-xl font-semibold mb-4 text-white">
-              Add Super Snapshot
-            </h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">Add Super Snapshot</h2>
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               type="date"
               value={superForm.date}
-              onChange={(e) =>
-                setSuperForm((f) => ({ ...f, date: e.target.value }))
-              }
+              onChange={(e) => setSuperForm((f) => ({ ...f, date: e.target.value }))}
               required
             />
             <input
@@ -464,9 +417,7 @@ export default function DataEntry() {
               type="number"
               step="any"
               value={superForm.total_value}
-              onChange={(e) =>
-                setSuperForm((f) => ({ ...f, total_value: e.target.value }))
-              }
+              onChange={(e) => setSuperForm((f) => ({ ...f, total_value: e.target.value }))}
               required
             />
             <div className="flex gap-4 mt-4">

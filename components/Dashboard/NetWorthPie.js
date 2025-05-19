@@ -1,11 +1,4 @@
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 // Modern color palette with better contrast and accessibility
 const COLORS = [
@@ -26,9 +19,7 @@ export default function NetWorthPie({ data, title }) {
 
   return (
     <div className="p-6 bg-earth-card rounded-xl w-full shadow-card hover:shadow-card-hover transition-shadow duration-300 border border-earth">
-      <h2 className="text-xl font-display font-semibold mb-6 text-earth-primary">
-        {title}
-      </h2>
+      <h2 className="text-xl font-display font-semibold mb-6 text-earth-primary">{title}</h2>
       {hasData ? (
         <ResponsiveContainer width="100%" height={350}>
           <PieChart>
@@ -72,9 +63,7 @@ export default function NetWorthPie({ data, title }) {
           </PieChart>
         </ResponsiveContainer>
       ) : (
-        <div className="text-gray-400 text-center py-20 font-medium">
-          No data to display
-        </div>
+        <div className="text-gray-400 text-center py-20 font-medium">No data to display</div>
       )}
     </div>
   );

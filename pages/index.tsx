@@ -94,9 +94,7 @@ export default function Dashboard({
   }>(null);
   // Add state for collapsible Budget Summary
   const [budgetCollapsed, setBudgetCollapsed] = useState(true);
-  const visibleBudgetItems = budgetCollapsed
-    ? budgetItems.slice(0, 5)
-    : budgetItems;
+  const visibleBudgetItems = budgetCollapsed ? budgetItems.slice(0, 5) : budgetItems;
 
   const handleCategorySelect = (cat: string) => {
     setCategory(cat);
@@ -104,8 +102,7 @@ export default function Dashboard({
   };
   const handleCryptoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { ticker_code, order_date, units_delta, unit_price, fee } =
-      cryptoForm;
+    const { ticker_code, order_date, units_delta, unit_price, fee } = cryptoForm;
     const { error } = await supabase.from('crypto_transactions').insert([
       {
         ticker_code,
@@ -137,8 +134,7 @@ export default function Dashboard({
   };
   const handleStockSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { ticker, purchase_date, volume, bought_price_aud, brokerage } =
-      stockForm;
+    const { ticker, purchase_date, volume, bought_price_aud, brokerage } = stockForm;
     const { error } = await supabase.from('stock_transactions').insert([
       {
         ticker,
@@ -180,8 +176,7 @@ export default function Dashboard({
   };
   const handleCheckinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { super_amount, date, super_type, cash_savings, debt_amount } =
-      checkinForm;
+    const { super_amount, date, super_type, cash_savings, debt_amount } = checkinForm;
     const { error } = await supabase.from('monthly_checkins').insert([
       {
         super_amount: Number(super_amount),
@@ -192,8 +187,7 @@ export default function Dashboard({
       },
     ]);
     if (error) setCheckinResult({ success: false, message: error.message });
-    else
-      setCheckinResult({ success: true, message: 'Monthly check-in saved!' });
+    else setCheckinResult({ success: true, message: 'Monthly check-in saved!' });
   };
 
   return (
@@ -207,11 +201,7 @@ export default function Dashboard({
             </h2>
           </div>
           <div className="flex-1 overflow-y-auto pr-2">
-            <BudgetSummary
-              budgetItems={visibleBudgetItems}
-              title=""
-              withBadges
-            />
+            <BudgetSummary budgetItems={visibleBudgetItems} title="" withBadges />
             {budgetItems.length > 5 && (
               <button
                 className="mt-4 py-1 px-4 rounded bg-earth-accent text-earth font-semibold hover:bg-earth-accent2 transition self-center"
@@ -245,13 +235,8 @@ export default function Dashboard({
               <h2 className="text-xl font-bold mb-4 text-earth-accent text-center flex items-center gap-2">
                 Monthly Check-in
               </h2>
-              <form
-                className="space-y-3 w-full max-w-lg mx-auto"
-                onSubmit={handleCheckinSubmit}
-              >
-                <label className="block text-earth-primary font-semibold">
-                  Super Amount
-                </label>
+              <form className="space-y-3 w-full max-w-lg mx-auto" onSubmit={handleCheckinSubmit}>
+                <label className="block text-earth-primary font-semibold">Super Amount</label>
                 <input
                   className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                   type="number"
@@ -265,21 +250,15 @@ export default function Dashboard({
                   }
                   required
                 />
-                <label className="block text-earth-primary font-semibold">
-                  Date
-                </label>
+                <label className="block text-earth-primary font-semibold">Date</label>
                 <input
                   className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                   type="date"
                   value={checkinForm.date}
-                  onChange={(e) =>
-                    setCheckinForm((f) => ({ ...f, date: e.target.value }))
-                  }
+                  onChange={(e) => setCheckinForm((f) => ({ ...f, date: e.target.value }))}
                   required
                 />
-                <label className="block text-earth-primary font-semibold">
-                  Super Type
-                </label>
+                <label className="block text-earth-primary font-semibold">Super Type</label>
                 <select
                   className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                   value={checkinForm.super_type}
@@ -361,10 +340,7 @@ export default function Dashboard({
                 </div>
               )}
               {step === 'form' && category === 'crypto' && (
-                <form
-                  className="space-y-3 w-full max-w-md mx-auto"
-                  onSubmit={handleCryptoSubmit}
-                >
+                <form className="space-y-3 w-full max-w-md mx-auto" onSubmit={handleCryptoSubmit}>
                   <h3 className="text-base font-semibold mb-1 text-earth-primary">
                     Add Crypto Transaction
                   </h3>
@@ -417,9 +393,7 @@ export default function Dashboard({
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                     placeholder="Fee"
                     value={cryptoForm.fee}
-                    onChange={(e) =>
-                      setCryptoForm((f) => ({ ...f, fee: e.target.value }))
-                    }
+                    onChange={(e) => setCryptoForm((f) => ({ ...f, fee: e.target.value }))}
                   />
                   <button
                     className="w-full mt-2 py-2 px-4 rounded bg-earth-accent text-earth font-bold hover:bg-earth-accent2 transition"
@@ -430,10 +404,7 @@ export default function Dashboard({
                 </form>
               )}
               {step === 'form' && category === 'etf' && (
-                <form
-                  className="space-y-3 w-full max-w-md mx-auto"
-                  onSubmit={handleEtfSubmit}
-                >
+                <form className="space-y-3 w-full max-w-md mx-auto" onSubmit={handleEtfSubmit}>
                   <h3 className="text-base font-semibold mb-1 text-earth-primary">
                     Add ETF Transaction
                   </h3>
@@ -441,42 +412,32 @@ export default function Dashboard({
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                     placeholder="Ticker"
                     value={etfForm.ticker}
-                    onChange={(e) =>
-                      setEtfForm((f) => ({ ...f, ticker: e.target.value }))
-                    }
+                    onChange={(e) => setEtfForm((f) => ({ ...f, ticker: e.target.value }))}
                   />
                   <input
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                     placeholder="Order Date"
                     type="date"
                     value={etfForm.order_date}
-                    onChange={(e) =>
-                      setEtfForm((f) => ({ ...f, order_date: e.target.value }))
-                    }
+                    onChange={(e) => setEtfForm((f) => ({ ...f, order_date: e.target.value }))}
                   />
                   <input
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                     placeholder="Units Delta"
                     value={etfForm.units_delta}
-                    onChange={(e) =>
-                      setEtfForm((f) => ({ ...f, units_delta: e.target.value }))
-                    }
+                    onChange={(e) => setEtfForm((f) => ({ ...f, units_delta: e.target.value }))}
                   />
                   <input
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                     placeholder="Order Price"
                     value={etfForm.order_price}
-                    onChange={(e) =>
-                      setEtfForm((f) => ({ ...f, order_price: e.target.value }))
-                    }
+                    onChange={(e) => setEtfForm((f) => ({ ...f, order_price: e.target.value }))}
                   />
                   <input
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                     placeholder="Brokerage"
                     value={etfForm.brokerage}
-                    onChange={(e) =>
-                      setEtfForm((f) => ({ ...f, brokerage: e.target.value }))
-                    }
+                    onChange={(e) => setEtfForm((f) => ({ ...f, brokerage: e.target.value }))}
                   />
                   <button
                     className="w-full mt-2 py-2 px-4 rounded bg-earth-accent text-earth font-bold hover:bg-earth-accent2 transition"
@@ -487,10 +448,7 @@ export default function Dashboard({
                 </form>
               )}
               {step === 'form' && category === 'stock' && (
-                <form
-                  className="space-y-3 w-full max-w-md mx-auto"
-                  onSubmit={handleStockSubmit}
-                >
+                <form className="space-y-3 w-full max-w-md mx-auto" onSubmit={handleStockSubmit}>
                   <h3 className="text-base font-semibold mb-1 text-earth-primary">
                     Add Stock Transaction
                   </h3>
@@ -498,9 +456,7 @@ export default function Dashboard({
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                     placeholder="Ticker"
                     value={stockForm.ticker}
-                    onChange={(e) =>
-                      setStockForm((f) => ({ ...f, ticker: e.target.value }))
-                    }
+                    onChange={(e) => setStockForm((f) => ({ ...f, ticker: e.target.value }))}
                   />
                   <input
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
@@ -518,9 +474,7 @@ export default function Dashboard({
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                     placeholder="Volume"
                     value={stockForm.volume}
-                    onChange={(e) =>
-                      setStockForm((f) => ({ ...f, volume: e.target.value }))
-                    }
+                    onChange={(e) => setStockForm((f) => ({ ...f, volume: e.target.value }))}
                   />
                   <input
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
@@ -537,9 +491,7 @@ export default function Dashboard({
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                     placeholder="Brokerage"
                     value={stockForm.brokerage}
-                    onChange={(e) =>
-                      setStockForm((f) => ({ ...f, brokerage: e.target.value }))
-                    }
+                    onChange={(e) => setStockForm((f) => ({ ...f, brokerage: e.target.value }))}
                   />
                   <button
                     className="w-full mt-2 py-2 px-4 rounded bg-earth-accent text-earth font-bold hover:bg-earth-accent2 transition"
@@ -574,11 +526,7 @@ export default function Dashboard({
             <div className="flex flex-row gap-8 overflow-x-auto">
               {assetsData.map((asset, idx) => (
                 <div key={idx} className="min-w-[320px] flex-1">
-                  <AssetLineChart
-                    data={asset.data}
-                    title={asset.title}
-                    color={asset.color}
-                  />
+                  <AssetLineChart data={asset.data} title={asset.title} color={asset.color} />
                 </div>
               ))}
             </div>
@@ -632,9 +580,7 @@ export async function getServerSideProps() {
     let cumulative = 0;
     const result = (transactions ?? []).map((tx) => ({
       date: String(tx[dateKey]),
-      amount: parseFloat(
-        (cumulative += Number(tx[unitsKey]) * Number(tx[priceKey])).toFixed(2)
-      ),
+      amount: parseFloat((cumulative += Number(tx[unitsKey]) * Number(tx[priceKey])).toFixed(2)),
     }));
     console.log('Accumulated transactions:', { transactions, result });
     return result;
@@ -649,13 +595,8 @@ export async function getServerSideProps() {
     { data: etfTransactions, error: etfError },
     { data: stockTransactions, error: stockError },
   ] = await Promise.all([
-    supabase
-      .from('budget_items')
-      .select('item, percent_allocation, monthly_amount, category'),
-    supabase
-      .from('super_snapshots')
-      .select('date, total_value')
-      .order('date', { ascending: true }),
+    supabase.from('budget_items').select('item, percent_allocation, monthly_amount, category'),
+    supabase.from('super_snapshots').select('date, total_value').order('date', { ascending: true }),
     supabase
       .from('crypto_transactions')
       .select('order_date, units_delta, unit_price')
@@ -674,15 +615,9 @@ export async function getServerSideProps() {
   console.log('\n=== Raw Data from Database ===');
   console.log('Budget Items:', JSON.stringify(rawBudgetItems, null, 2));
   console.log('Super Snapshots:', JSON.stringify(superSnapshots, null, 2));
-  console.log(
-    'Crypto Transactions:',
-    JSON.stringify(cryptoTransactions, null, 2)
-  );
+  console.log('Crypto Transactions:', JSON.stringify(cryptoTransactions, null, 2));
   console.log('ETF Transactions:', JSON.stringify(etfTransactions, null, 2));
-  console.log(
-    'Stock Transactions:',
-    JSON.stringify(stockTransactions, null, 2)
-  );
+  console.log('Stock Transactions:', JSON.stringify(stockTransactions, null, 2));
 
   console.log('\n=== Any Errors ===');
   if (budgetError) console.error('Budget items error:', budgetError);
@@ -706,28 +641,21 @@ export async function getServerSideProps() {
       category: b.category,
     })
   );
-  console.log(
-    'Transformed budget items:',
-    JSON.stringify(budgetItems, null, 2)
-  );
+  console.log('Transformed budget items:', JSON.stringify(budgetItems, null, 2));
 
   const filteredBudgetItems = budgetItems.filter(
-    (item: BudgetItem) =>
-      item.category && !isNaN(item.amount) && item.amount > 0
+    (item: BudgetItem) => item.category && !isNaN(item.amount) && item.amount > 0
   );
-  console.log(
-    'Filtered budget items:',
-    JSON.stringify(filteredBudgetItems, null, 2)
-  );
+  console.log('Filtered budget items:', JSON.stringify(filteredBudgetItems, null, 2));
 
   const budgetByCategoryMap: Record<string, number> = {};
   filteredBudgetItems.forEach((item: BudgetItem) => {
-    budgetByCategoryMap[item.category] =
-      (budgetByCategoryMap[item.category] || 0) + item.amount;
+    budgetByCategoryMap[item.category] = (budgetByCategoryMap[item.category] || 0) + item.amount;
   });
-  const budgetByCategory = Object.entries(budgetByCategoryMap).map(
-    ([name, value]) => ({ name, value })
-  );
+  const budgetByCategory = Object.entries(budgetByCategoryMap).map(([name, value]) => ({
+    name,
+    value,
+  }));
   console.log('Budget by category:', JSON.stringify(budgetByCategory, null, 2));
 
   // Process asset data

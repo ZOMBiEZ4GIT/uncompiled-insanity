@@ -22,9 +22,7 @@ export default function BudgetSummary({ budgetItems, title, withBadges }) {
 
   return (
     <div className="p-6 bg-earth-card rounded-xl w-full shadow-card hover:shadow-card-hover transition-shadow duration-300 border border-earth">
-      <h2 className="text-xl font-display font-semibold mb-6 text-earth-primary">
-        {title}
-      </h2>
+      <h2 className="text-xl font-display font-semibold mb-6 text-earth-primary">{title}</h2>
       <div className="overflow-x-auto">
         <table className="w-full table-auto">
           <thead>
@@ -49,9 +47,7 @@ export default function BudgetSummary({ budgetItems, title, withBadges }) {
                 key={idx}
                 className="border-b border-slate-100 dark:border-dark-border/50 hover:bg-slate-50 dark:hover:bg-dark-card/50 transition-colors"
               >
-                <td className="py-3 px-4 text-slate-800 dark:text-slate-200">
-                  {item.name}
-                </td>
+                <td className="py-3 px-4 text-slate-800 dark:text-slate-200">{item.name}</td>
                 <td className="py-3 px-4 text-slate-800 dark:text-slate-200">
                   {Number(item.percentage).toFixed(2)}%
                 </td>
@@ -66,9 +62,7 @@ export default function BudgetSummary({ budgetItems, title, withBadges }) {
                       {item.category}
                     </span>
                   ) : (
-                    <span className="text-slate-800 dark:text-slate-200">
-                      {item.category}
-                    </span>
+                    <span className="text-slate-800 dark:text-slate-200">{item.category}</span>
                   )}
                 </td>
               </tr>

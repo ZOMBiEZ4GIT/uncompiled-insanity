@@ -1,13 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { v4 as uuidv4 } from 'uuid';
 
 interface BudgetItem {
@@ -56,10 +49,7 @@ export default function BudgetPlayground() {
         setBudgetItems(data || []);
         // Optionally, infer monthly income from sum of items
         if (data && data.length > 0) {
-          const total = data.reduce(
-            (sum, item) => sum + (item.monthly_amount || 0),
-            0
-          );
+          const total = data.reduce((sum, item) => sum + (item.monthly_amount || 0), 0);
           setMonthlyIncome(total);
         }
       }
@@ -85,9 +75,7 @@ export default function BudgetPlayground() {
       const updated = [...items];
       if (field === 'monthly_amount') {
         updated[idx].monthly_amount = value;
-        updated[idx].percent_allocation = monthlyIncome
-          ? (value / monthlyIncome) * 100
-          : 0;
+        updated[idx].percent_allocation = monthlyIncome ? (value / monthlyIncome) * 100 : 0;
       } else {
         updated[idx].percent_allocation = value;
         updated[idx].monthly_amount = (monthlyIncome * value) / 100;
@@ -126,22 +114,15 @@ export default function BudgetPlayground() {
     setError(null);
     setSuccess(null);
     // Remove empty items
-    const filtered = budgetItems.filter(
-      (item) => item.item && item.monthly_amount > 0
-    );
+    const filtered = budgetItems.filter((item) => item.item && item.monthly_amount > 0);
     // Delete all existing, then insert new
-    const { error: delError } = await supabase
-      .from('budget_items')
-      .delete()
-      .neq('id', '');
+    const { error: delError } = await supabase.from('budget_items').delete().neq('id', '');
     if (delError) {
       setError('Failed to clear old budget items.');
       setSaving(false);
       return;
     }
-    const { error: insError } = await supabase
-      .from('budget_items')
-      .insert(filtered);
+    const { error: insError } = await supabase.from('budget_items').insert(filtered);
     if (insError) {
       setError('Failed to save new budget.');
     } else {
@@ -161,14 +142,10 @@ export default function BudgetPlayground() {
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center p-6 bg-[#111827]">
       <div className="w-full max-w-5xl bg-[#18181B] border border-zinc-800 text-white rounded-3xl shadow-2xl p-8">
-        <h1 className="text-3xl font-bold mb-6 text-accent">
-          Budget Playground
-        </h1>
+        <h1 className="text-3xl font-bold mb-6 text-accent">Budget Playground</h1>
         {/* Monthly Income Input */}
         <div className="mb-6 flex flex-col md:flex-row md:items-center gap-4">
-          <label className="font-semibold text-lg text-white">
-            Monthly Income:
-          </label>
+          <label className="font-semibold text-lg text-white">Monthly Income:</label>
           <input
             type="number"
             className="border border-zinc-700 rounded px-4 py-2 w-48 text-lg font-bold bg-[#18181B] text-white"
@@ -249,11 +226,7 @@ export default function BudgetPlayground() {
                       min={0}
                       max={100}
                       onChange={(e) =>
-                        handleItemChange(
-                          idx,
-                          'percent_allocation',
-                          Number(e.target.value)
-                        )
+                        handleItemChange(idx, 'percent_allocation', Number(e.target.value))
                       }
                     />
                   </td>
@@ -264,23 +237,15 @@ export default function BudgetPlayground() {
                       value={Number(item.monthly_amount).toFixed(2)}
                       min={0}
                       onChange={(e) =>
-                        handleItemChange(
-                          idx,
-                          'monthly_amount',
-                          Number(e.target.value)
-                        )
+                        handleItemChange(idx, 'monthly_amount', Number(e.target.value))
                       }
                     />
                   </td>
                   <td className="text-right">
-                    {item.weekly_amount
-                      ? `$${item.weekly_amount.toFixed(2)}`
-                      : ''}
+                    {item.weekly_amount ? `$${item.weekly_amount.toFixed(2)}` : ''}
                   </td>
                   <td className="text-right">
-                    {item.yearly_amount
-                      ? `$${item.yearly_amount.toFixed(2)}`
-                      : ''}
+                    {item.yearly_amount ? `$${item.yearly_amount.toFixed(2)}` : ''}
                   </td>
                   <td>
                     <button
@@ -316,11 +281,7 @@ export default function BudgetPlayground() {
             <div className="w-full h-4 bg-zinc-800 rounded-full overflow-hidden">
               <div
                 className={`h-full transition-all duration-300 ${
-                  remaining < 0
-                    ? 'bg-red-500'
-                    : remaining === 0
-                      ? 'bg-green-400'
-                      : 'bg-yellow-400'
+                  remaining < 0 ? 'bg-red-500' : remaining === 0 ? 'bg-green-400' : 'bg-yellow-400'
                 }`}
                 style={{
                   width: `${Math.min(100, ((monthlyIncome - remaining) / monthlyIncome) * 100)}%`,
@@ -368,9 +329,7 @@ export default function BudgetPlayground() {
             {saving ? 'Saving...' : 'Save & Commit'}
           </button>
           {error && <span className="text-red-400 font-semibold">{error}</span>}
-          {success && (
-            <span className="text-green-400 font-semibold">{success}</span>
-          )}
+          {success && <span className="text-green-400 font-semibold">{success}</span>}
         </div>
       </div>
     </div>
