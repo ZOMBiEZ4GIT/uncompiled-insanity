@@ -1,6 +1,7 @@
-﻿import '@/styles/globals.css';
+import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
+import Layout from '@/components/Layout';
 
 // Import Poppins font from Google Fonts
 import '@fontsource/poppins/400.css';
@@ -20,5 +21,9 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, []);
 
-  return <Component {...pageProps} />;
+  return (
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
+  );
 }

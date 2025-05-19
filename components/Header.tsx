@@ -1,10 +1,10 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 
 export default function Header() {
   return (
-    <header className="bg-blue-600 text-white p-4">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-bold">
+    <header className="bg-earth-card text-earth py-4 shadow-md">
+      <div className="max-w-7xl mx-auto px-4">
+        <h1 className="text-2xl font-extrabold text-earth-primary">
           <Link href="/">Uncompiled Insanity</Link>
         </h1>
       </div>
