@@ -2,6 +2,7 @@
 import BudgetSummary from '@/components/Dashboard/BudgetSummary';
 import NetWorthPie from '@/components/Dashboard/NetWorthPie';
 import AssetLineChart from '@/components/Dashboard/AssetLineChart';
+import LivePrices from '@/components/Dashboard/LivePrices';
 import { supabase } from '@/utils/supabaseClient';
 
 const categories = [
@@ -518,6 +519,10 @@ export default function Dashboard({
               )}
             </div>
           </div>
+          {/* Live Prices Section */}
+          <div className="mt-8">
+            <LivePrices />
+          </div>
           {/* Asset Performance: full width */}
           <div className="bg-earth-card rounded-2xl shadow-card p-8 flex flex-col justify-center w-full mt-4 border border-earth text-earth">
             <h2 className="text-2xl font-bold mb-4 text-earth-accent3 text-center flex items-center gap-2">
@@ -539,95 +544,22 @@ export default function Dashboard({
 
 // Add getServerSideProps to fetch data
 export async function getServerSideProps() {
-  console.log('Starting data fetch...');
-
-  // Test database connection and list all tables
-  console.log('\n=== Testing Database Connection ===');
-  const { data: tables, error: tablesError } = await supabase
-    .from('information_schema.tables')
-    .select('table_name')
-    .eq('table_schema', 'public');
-
-  console.log('Available tables:', tables);
-  console.log('Tables error:', tablesError);
-
-  // Test a simple query on each table
-  console.log('\n=== Testing Table Access ===');
-  const testQueries = [
-    supabase.from('budget_items').select('count'),
-    supabase.from('super_snapshots').select('count'),
-    supabase.from('crypto_transactions').select('count'),
-    supabase.from('etf_transactions').select('count'),
-    supabase.from('stock_transactions').select('count'),
-  ];
-
-  const testResults = await Promise.all(testQueries);
-  console.log('Table counts:', {
-    budget_items: testResults[0].data,
-    super_snapshots: testResults[1].data,
-    crypto_transactions: testResults[2].data,
-    etf_transactions: testResults[3].data,
-    stock_transactions: testResults[4].data,
-  });
-
-  // Helper function to accumulate transaction values
-  const accumulateTransactions = (
-    transactions: Record<string, number | string>[],
-    dateKey: string,
-    unitsKey: string,
-    priceKey: string
-  ) => {
-    let cumulative = 0;
-    const result = (transactions ?? []).map((tx) => ({
-      date: String(tx[dateKey]),
-      amount: parseFloat((cumulative += Number(tx[unitsKey]) * Number(tx[priceKey])).toFixed(2)),
-    }));
-    console.log('Accumulated transactions:', { transactions, result });
-    return result;
-  };
-
   // Fetch all data in parallel
-  console.log('Fetching data from Supabase...');
   const [
-    { data: rawBudgetItems, error: budgetError },
-    { data: superSnapshots, error: superError },
-    { data: cryptoTransactions, error: cryptoError },
-    { data: etfTransactions, error: etfError },
-    { data: stockTransactions, error: stockError },
+    { data: rawBudgetItems = [] },
+    { data: superSnapshots = [] },
+    { data: cryptoTransactions = [] },
+    { data: etfTransactions = [] },
+    { data: stockTransactions = [] },
   ] = await Promise.all([
     supabase.from('budget_items').select('item, percent_allocation, monthly_amount, category'),
     supabase.from('super_snapshots').select('date, total_value').order('date', { ascending: true }),
-    supabase
-      .from('crypto_transactions')
-      .select('order_date, units_delta, unit_price')
-      .order('order_date', { ascending: true }),
-    supabase
-      .from('etf_transactions')
-      .select('order_date, units_delta, order_price')
-      .order('order_date', { ascending: true }),
-    supabase
-      .from('stock_transactions')
-      .select('purchase_date, volume, bought_price_aud')
-      .order('purchase_date', { ascending: true }),
+    supabase.from('crypto_transactions').select('order_date, units_delta, unit_price'),
+    supabase.from('etf_transactions').select('order_date, units_delta, order_price'),
+    supabase.from('stock_transactions').select('purchase_date, volume, bought_price_aud'),
   ]);
 
-  // Log raw data and any errors
-  console.log('\n=== Raw Data from Database ===');
-  console.log('Budget Items:', JSON.stringify(rawBudgetItems, null, 2));
-  console.log('Super Snapshots:', JSON.stringify(superSnapshots, null, 2));
-  console.log('Crypto Transactions:', JSON.stringify(cryptoTransactions, null, 2));
-  console.log('ETF Transactions:', JSON.stringify(etfTransactions, null, 2));
-  console.log('Stock Transactions:', JSON.stringify(stockTransactions, null, 2));
-
-  console.log('\n=== Any Errors ===');
-  if (budgetError) console.error('Budget items error:', budgetError);
-  if (superError) console.error('Super snapshots error:', superError);
-  if (cryptoError) console.error('Crypto transactions error:', cryptoError);
-  if (etfError) console.error('ETF transactions error:', etfError);
-  if (stockError) console.error('Stock transactions error:', stockError);
-
   // Transform budget items
-  console.log('\n=== Transforming Data ===');
   const budgetItems = (rawBudgetItems ?? []).map(
     (b: {
       item: string;
@@ -641,12 +573,10 @@ export async function getServerSideProps() {
       category: b.category,
     })
   );
-  console.log('Transformed budget items:', JSON.stringify(budgetItems, null, 2));
 
   const filteredBudgetItems = budgetItems.filter(
     (item: BudgetItem) => item.category && !isNaN(item.amount) && item.amount > 0
   );
-  console.log('Filtered budget items:', JSON.stringify(filteredBudgetItems, null, 2));
 
   const budgetByCategoryMap: Record<string, number> = {};
   filteredBudgetItems.forEach((item: BudgetItem) => {
@@ -656,14 +586,26 @@ export async function getServerSideProps() {
     name,
     value,
   }));
-  console.log('Budget by category:', JSON.stringify(budgetByCategory, null, 2));
+
+  // Helper function to accumulate transaction values
+  const accumulateTransactions = (
+    transactions: Record<string, number | string>[],
+    dateKey: string,
+    unitsKey: string,
+    priceKey: string
+  ) => {
+    let cumulative = 0;
+    return (transactions ?? []).map((tx: Record<string, number | string>) => ({
+      date: String(tx[dateKey]),
+      amount: parseFloat((cumulative += Number(tx[unitsKey]) * Number(tx[priceKey])).toFixed(2)),
+    }));
+  };
 
   // Process asset data
-  console.log('\n=== Processing Asset Data ===');
-  const assetsData: AssetData[] = [
+  const assetsData = [
     {
       title: 'Super',
-      data: (superSnapshots ?? []).map((snap) => ({
+      data: (superSnapshots ?? []).map((snap: { date: string; total_value: number }) => ({
         date: snap.date,
         amount: snap.total_value,
       })),
@@ -700,23 +642,19 @@ export async function getServerSideProps() {
       color: '#FFD600',
     },
   ];
-  console.log('Processed assets data:', JSON.stringify(assetsData, null, 2));
 
   // Net worth data for pie chart
   const netWorthData = assetsData.map((asset) => ({
     name: asset.title,
     value: asset.data.length > 0 ? asset.data[asset.data.length - 1].amount : 0,
   }));
-  console.log('Net worth data:', JSON.stringify(netWorthData, null, 2));
 
-  console.log('\n=== Final Props ===');
   const props = {
     budgetItems: filteredBudgetItems,
     netWorthData,
     assetsData,
     budgetByCategory,
   };
-  console.log('Props being returned:', JSON.stringify(props, null, 2));
 
   return { props };
 }
