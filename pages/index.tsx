@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BudgetSummary from '@/components/Dashboard/BudgetSummary';
 import NetWorthPie from '@/components/Dashboard/NetWorthPie';
 import AssetLineChart from '@/components/Dashboard/AssetLineChart';
@@ -92,6 +92,23 @@ export default function Dashboard({
     success: boolean;
     message: string;
   }>(null);
+  // Live price state
+  const tickers = ['bitcoin', 'ethereum'];
+  const [prices, setPrices] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    tickers.forEach(async (t) => {
+      try {
+        const res = await fetch(`/api/prices/${t}`);
+        if (res.ok) {
+          const data = await res.json();
+          setPrices((p) => ({ ...p, [t]: data.usd }));
+        }
+      } catch (err) {
+        console.error('Price fetch failed', t, err);
+      }
+    });
+  }, []);
   // Add state for collapsible Budget Summary
   const [budgetCollapsed, setBudgetCollapsed] = useState(true);
   const visibleBudgetItems = budgetCollapsed
@@ -220,6 +237,24 @@ export default function Dashboard({
                 {budgetCollapsed ? 'Show More' : 'Show Less'}
               </button>
             )}
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-2 text-earth-primary">
+                Prices
+              </h3>
+              <table className="w-full text-sm">
+                <tbody>
+                  {tickers.map((t) => (
+                    <tr key={t} className="border-b border-earth/50">
+                      <td className="py-1 pr-2 capitalize">{t}</td>
+                      <td className="py-1 text-right">
+                        {prices[t] !== undefined ? prices[t].toFixed(2) : '...'}{' '}
+                        USD
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </aside>
         {/* Main Content Grid */}

@@ -1,4 +1,4 @@
-﻿// pages/data-entry.tsx
+// pages/data-entry.tsx
 import { useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 
@@ -45,6 +45,15 @@ export default function DataEntry() {
     employer_contributions: '',
     total_value: '',
   });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateNumber = (field: string, value: string) => {
+    setErrors((e) => ({
+      ...e,
+      [field]: Number(value) < 0 ? 'Must be non-negative' : '',
+    }));
+  };
 
   // Handle category selection with animation
   const handleCategorySelect = (cat: string) => {
@@ -222,34 +231,49 @@ export default function DataEntry() {
               placeholder="Units"
               type="number"
               step="any"
+              min="0"
               value={cryptoForm.units_delta}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, units_delta: e.target.value }))
-              }
+              onChange={(e) => {
+                validateNumber('crypto_units', e.target.value);
+                setCryptoForm((f) => ({ ...f, units_delta: e.target.value }));
+              }}
               required
             />
+            {errors.crypto_units && (
+              <p className="text-red-500 text-sm">{errors.crypto_units}</p>
+            )}
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               placeholder="Unit Price"
               type="number"
               step="any"
+              min="0"
               value={cryptoForm.unit_price}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, unit_price: e.target.value }))
-              }
+              onChange={(e) => {
+                validateNumber('crypto_price', e.target.value);
+                setCryptoForm((f) => ({ ...f, unit_price: e.target.value }));
+              }}
               required
             />
+            {errors.crypto_price && (
+              <p className="text-red-500 text-sm">{errors.crypto_price}</p>
+            )}
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               placeholder="Fee"
               type="number"
               step="any"
+              min="0"
               value={cryptoForm.fee}
-              onChange={(e) =>
-                setCryptoForm((f) => ({ ...f, fee: e.target.value }))
-              }
+              onChange={(e) => {
+                validateNumber('crypto_fee', e.target.value);
+                setCryptoForm((f) => ({ ...f, fee: e.target.value }));
+              }}
               required
             />
+            {errors.crypto_fee && (
+              <p className="text-red-500 text-sm">{errors.crypto_fee}</p>
+            )}
             <div className="flex gap-4 mt-4">
               <button
                 type="submit"
@@ -295,34 +319,49 @@ export default function DataEntry() {
               placeholder="Units"
               type="number"
               step="any"
+              min="0"
               value={etfForm.units_delta}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, units_delta: e.target.value }))
-              }
+              onChange={(e) => {
+                validateNumber('etf_units', e.target.value);
+                setEtfForm((f) => ({ ...f, units_delta: e.target.value }));
+              }}
               required
             />
+            {errors.etf_units && (
+              <p className="text-red-500 text-sm">{errors.etf_units}</p>
+            )}
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               placeholder="Order Price"
               type="number"
               step="any"
+              min="0"
               value={etfForm.order_price}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, order_price: e.target.value }))
-              }
+              onChange={(e) => {
+                validateNumber('etf_price', e.target.value);
+                setEtfForm((f) => ({ ...f, order_price: e.target.value }));
+              }}
               required
             />
+            {errors.etf_price && (
+              <p className="text-red-500 text-sm">{errors.etf_price}</p>
+            )}
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               placeholder="Brokerage"
               type="number"
               step="any"
+              min="0"
               value={etfForm.brokerage}
-              onChange={(e) =>
-                setEtfForm((f) => ({ ...f, brokerage: e.target.value }))
-              }
+              onChange={(e) => {
+                validateNumber('etf_fee', e.target.value);
+                setEtfForm((f) => ({ ...f, brokerage: e.target.value }));
+              }}
               required
             />
+            {errors.etf_fee && (
+              <p className="text-red-500 text-sm">{errors.etf_fee}</p>
+            )}
             <div className="flex gap-4 mt-4">
               <button
                 type="submit"
@@ -368,37 +407,52 @@ export default function DataEntry() {
               placeholder="Volume"
               type="number"
               step="any"
+              min="0"
               value={stockForm.volume}
-              onChange={(e) =>
-                setStockForm((f) => ({ ...f, volume: e.target.value }))
-              }
+              onChange={(e) => {
+                validateNumber('stock_volume', e.target.value);
+                setStockForm((f) => ({ ...f, volume: e.target.value }));
+              }}
               required
             />
+            {errors.stock_volume && (
+              <p className="text-red-500 text-sm">{errors.stock_volume}</p>
+            )}
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               placeholder="Bought Price (AUD)"
               type="number"
               step="any"
+              min="0"
               value={stockForm.bought_price_aud}
-              onChange={(e) =>
+              onChange={(e) => {
+                validateNumber('stock_price', e.target.value);
                 setStockForm((f) => ({
                   ...f,
                   bought_price_aud: e.target.value,
-                }))
-              }
+                }));
+              }}
               required
             />
+            {errors.stock_price && (
+              <p className="text-red-500 text-sm">{errors.stock_price}</p>
+            )}
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               placeholder="Brokerage"
               type="number"
               step="any"
+              min="0"
               value={stockForm.brokerage}
-              onChange={(e) =>
-                setStockForm((f) => ({ ...f, brokerage: e.target.value }))
-              }
+              onChange={(e) => {
+                validateNumber('stock_fee', e.target.value);
+                setStockForm((f) => ({ ...f, brokerage: e.target.value }));
+              }}
               required
             />
+            {errors.stock_fee && (
+              <p className="text-red-500 text-sm">{errors.stock_fee}</p>
+            )}
             <div className="flex gap-4 mt-4">
               <button
                 type="submit"
@@ -435,40 +489,55 @@ export default function DataEntry() {
               placeholder="Voluntary Contributions"
               type="number"
               step="any"
+              min="0"
               value={superForm.voluntary_contributions}
-              onChange={(e) =>
+              onChange={(e) => {
+                validateNumber('super_vol', e.target.value);
                 setSuperForm((f) => ({
                   ...f,
                   voluntary_contributions: e.target.value,
-                }))
-              }
+                }));
+              }}
               required
             />
+            {errors.super_vol && (
+              <p className="text-red-500 text-sm">{errors.super_vol}</p>
+            )}
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               placeholder="Employer Contributions"
               type="number"
               step="any"
+              min="0"
               value={superForm.employer_contributions}
-              onChange={(e) =>
+              onChange={(e) => {
+                validateNumber('super_emp', e.target.value);
                 setSuperForm((f) => ({
                   ...f,
                   employer_contributions: e.target.value,
-                }))
-              }
+                }));
+              }}
               required
             />
+            {errors.super_emp && (
+              <p className="text-red-500 text-sm">{errors.super_emp}</p>
+            )}
             <input
               className="w-full border border-zinc-700 rounded p-2 bg-[#18181B] text-white"
               placeholder="Total Value"
               type="number"
               step="any"
+              min="0"
               value={superForm.total_value}
-              onChange={(e) =>
-                setSuperForm((f) => ({ ...f, total_value: e.target.value }))
-              }
+              onChange={(e) => {
+                validateNumber('super_total', e.target.value);
+                setSuperForm((f) => ({ ...f, total_value: e.target.value }));
+              }}
               required
             />
+            {errors.super_total && (
+              <p className="text-red-500 text-sm">{errors.super_total}</p>
+            )}
             <div className="flex gap-4 mt-4">
               <button
                 type="submit"

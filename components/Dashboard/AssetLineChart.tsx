@@ -9,7 +9,21 @@ import {
   CartesianGrid,
 } from 'recharts';
 
-export default function AssetLineChart({ data, title, color }) {
+export interface AssetDataPoint {
+  date: string;
+  amount: number;
+}
+
+interface AssetLineChartProps {
+  data: AssetDataPoint[];
+  title: string;
+  color?: string;
+}
+export default function AssetLineChart({
+  data,
+  title,
+  color,
+}: AssetLineChartProps) {
   return (
     <div className="p-6 bg-earth-card rounded-xl w-full shadow-card hover:shadow-card-hover transition-shadow duration-300 border border-earth">
       <h2 className="text-xl font-display font-semibold mb-6 text-earth-primary">

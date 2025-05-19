@@ -21,7 +21,17 @@ const COLORS = [
   '#06B6D4', // Cyan
 ];
 
-export default function NetWorthPie({ data, title }) {
+export interface NetWorthDatum {
+  name: string;
+  value: number;
+}
+
+interface NetWorthPieProps {
+  data: NetWorthDatum[];
+  title: string;
+}
+
+export default function NetWorthPie({ data, title }: NetWorthPieProps) {
   const hasData = Array.isArray(data) && data.some((d) => d.value > 0);
 
   return (

@@ -1,4 +1,21 @@
-export default function BudgetSummary({ budgetItems, title, withBadges }) {
+export interface BudgetItem {
+  name: string;
+  percentage: number;
+  amount: number;
+  category: string;
+}
+
+interface BudgetSummaryProps {
+  budgetItems: BudgetItem[];
+  title: string;
+  withBadges?: boolean;
+}
+
+export default function BudgetSummary({
+  budgetItems,
+  title,
+  withBadges = false,
+}: BudgetSummaryProps) {
   // Sort items by amount descending
   const sortedItems = [...budgetItems].sort((a, b) => b.amount - a.amount);
 
