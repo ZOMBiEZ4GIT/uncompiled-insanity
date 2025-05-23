@@ -44,6 +44,13 @@ The **Personal Financial Tracker** is an intuitive web application designed to c
 
 - **Vercel**: Efficient, scalable deployment and hosting.
 
+### Access Control
+
+The dashboard is protected by a simple password. Set the `SITE_PASSWORD`
+environment variable to configure the password (defaults to `TEST`). Users are
+redirected to `/login` and must enter the password before any API routes or
+database queries can be accessed.
+
 ---
 
 ## 💡 Current State

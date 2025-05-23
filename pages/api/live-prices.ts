@@ -1,6 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { supabase } from '@/utils/supabaseClient';
 
+function isAuthed(req: NextApiRequest) {
+  return req.cookies?.auth === 'true';
+}
+
 // Types for price data
 interface PriceData {
   ticker: string;
@@ -155,6 +159,9 @@ async function fetchStockAndEtfPrices(tickers: string[]): Promise<PriceData[]> {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (!isAuthed(req)) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
