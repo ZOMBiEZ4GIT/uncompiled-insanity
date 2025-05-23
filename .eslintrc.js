@@ -19,6 +19,11 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {
+    // Loosen strict rules for POC development
+    '@typescript-eslint/no-unused-vars': 'off', // Allow unused variables in TS/TSX
+    'no-unused-vars': 'off', // Allow unused variables in JS/JSX
+    '@typescript-eslint/explicit-module-boundary-types': 'off', // Don't require explicit return types
+    '@typescript-eslint/no-explicit-any': 'off', // Allow use of 'any' type
     // add any project-specific overrides here
   },
 };
