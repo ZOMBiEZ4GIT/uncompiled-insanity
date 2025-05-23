@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+﻿import { useState, useEffect } from 'react';
 import NetWorthPie from '@/components/Dashboard/NetWorthPie';
 import AssetLineChart from '@/components/Dashboard/AssetLineChart';
 import LivePrices from '@/components/Dashboard/LivePrices';
@@ -62,18 +62,27 @@ export default function Dashboard({ netWorthData = [], assetsData = [] }: Dashbo
     bought_price_aud: '',
     brokerage: '',
   });
-  // Add Monthly Check-in form state
+  // Replace checkinForm state and form fields
   const [checkinForm, setCheckinForm] = useState({
+    month: new Date().getMonth() + 1,
+    year: new Date().getFullYear(),
     super_amount: '',
-    date: '',
-    super_type: 'voluntary',
     cash_savings: '',
     debt_amount: '',
   });
-  const [checkinResult, setCheckinResult] = useState<null | {
-    success: boolean;
-    message: string;
-  }>(null);
+  const [checkinResult, setCheckinResult] = useState<null | { success: boolean; message: string }>(
+    null
+  );
+
+  // Add state for dashboard data
+  const [dashboardData, setDashboardData] = useState<any[]>([]);
+
+  // Fetch monthly_checkins for dashboard
+  useEffect(() => {
+    fetch('/api/get-checkins')
+      .then((res) => res.json())
+      .then((data) => setDashboardData(data));
+  }, [checkinResult]);
 
   const handleCategorySelect = (cat: string) => {
     setCategory(cat);
@@ -155,18 +164,24 @@ export default function Dashboard({ netWorthData = [], assetsData = [] }: Dashbo
   };
   const handleCheckinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { super_amount, date, super_type, cash_savings, debt_amount } = checkinForm;
-    const { error } = await supabase.from('monthly_checkins').insert([
-      {
+    const { month, year, super_amount, cash_savings, debt_amount } = checkinForm;
+    const res = await fetch('/api/save-checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        month,
+        year,
         super_amount: Number(super_amount),
-        date,
-        super_type,
         cash_savings: Number(cash_savings),
         debt_amount: Number(debt_amount),
-      },
-    ]);
-    if (error) setCheckinResult({ success: false, message: error.message });
-    else setCheckinResult({ success: true, message: 'Monthly check-in saved!' });
+      }),
+    });
+    const result = await res.json();
+    setCheckinResult(
+      result.success
+        ? { success: true, message: 'Monthly check-in saved!' }
+        : { success: false, message: result.error || 'Error saving check-in' }
+    );
   };
 
   return (
@@ -185,13 +200,72 @@ export default function Dashboard({ netWorthData = [], assetsData = [] }: Dashbo
                 <h2 className="text-xl font-bold mb-4 text-earth-primary text-center flex items-center gap-2">
                   Net Worth Breakdown
                 </h2>
-                <NetWorthPie data={netWorthData} title="" />
+                <NetWorthPie
+                  data={
+                    dashboardData.length
+                      ? [
+                          {
+                            name: 'Super',
+                            value: dashboardData[dashboardData.length - 1].super_amount,
+                          },
+                          {
+                            name: 'Cash',
+                            value: dashboardData[dashboardData.length - 1].cash_savings,
+                          },
+                          {
+                            name: 'Stocks',
+                            value: dashboardData[dashboardData.length - 1].stocks_amount,
+                          },
+                          {
+                            name: 'ETF',
+                            value: dashboardData[dashboardData.length - 1].etf_amount,
+                          },
+                          {
+                            name: 'Crypto',
+                            value: dashboardData[dashboardData.length - 1].crypto_amount,
+                          },
+                          {
+                            name: 'Debt',
+                            value: -dashboardData[dashboardData.length - 1].debt_amount,
+                          },
+                        ]
+                      : []
+                  }
+                  title=""
+                />
               </div>
               <div className="bg-earth-card rounded-2xl shadow-card p-8 flex flex-col justify-center border border-earth text-earth">
                 <h2 className="text-xl font-bold mb-4 text-earth-accent text-center flex items-center gap-2">
                   Monthly Check-in
                 </h2>
                 <form className="space-y-3 w-full max-w-lg mx-auto" onSubmit={handleCheckinSubmit}>
+                  <label className="block text-earth-primary font-semibold">Month</label>
+                  <select
+                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
+                    value={checkinForm.month}
+                    onChange={(e) =>
+                      setCheckinForm((f) => ({ ...f, month: Number(e.target.value) }))
+                    }
+                    required
+                  >
+                    {[...Array(12)].map((_, i) => (
+                      <option key={i + 1} value={i + 1}>
+                        {new Date(0, i).toLocaleString('default', { month: 'long' })}
+                      </option>
+                    ))}
+                  </select>
+                  <label className="block text-earth-primary font-semibold">Year</label>
+                  <input
+                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
+                    type="number"
+                    value={checkinForm.year}
+                    onChange={(e) =>
+                      setCheckinForm((f) => ({ ...f, year: Number(e.target.value) }))
+                    }
+                    min="2000"
+                    max="2100"
+                    required
+                  />
                   <label className="block text-earth-primary font-semibold">Super Amount</label>
                   <input
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
@@ -199,66 +273,28 @@ export default function Dashboard({ netWorthData = [], assetsData = [] }: Dashbo
                     placeholder="Super Amount"
                     value={checkinForm.super_amount}
                     onChange={(e) =>
-                      setCheckinForm((f) => ({
-                        ...f,
-                        super_amount: e.target.value,
-                      }))
+                      setCheckinForm((f) => ({ ...f, super_amount: e.target.value }))
                     }
                     required
                   />
-                  <label className="block text-earth-primary font-semibold">Date</label>
-                  <input
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    type="date"
-                    value={checkinForm.date}
-                    onChange={(e) => setCheckinForm((f) => ({ ...f, date: e.target.value }))}
-                    required
-                  />
-                  <label className="block text-earth-primary font-semibold">Super Type</label>
-                  <select
-                    className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
-                    value={checkinForm.super_type}
-                    onChange={(e) =>
-                      setCheckinForm((f) => ({
-                        ...f,
-                        super_type: e.target.value,
-                      }))
-                    }
-                    required
-                  >
-                    <option value="voluntary">Voluntary</option>
-                    <option value="compulsory">Compulsory</option>
-                  </select>
-                  <label className="block text-earth-primary font-semibold">
-                    Current Cash Savings
-                  </label>
+                  <label className="block text-earth-primary font-semibold">Cash Savings</label>
                   <input
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                     type="number"
                     placeholder="Cash Savings"
                     value={checkinForm.cash_savings}
                     onChange={(e) =>
-                      setCheckinForm((f) => ({
-                        ...f,
-                        cash_savings: e.target.value,
-                      }))
+                      setCheckinForm((f) => ({ ...f, cash_savings: e.target.value }))
                     }
                     required
                   />
-                  <label className="block text-earth-primary font-semibold">
-                    Current Debt Amount
-                  </label>
+                  <label className="block text-earth-primary font-semibold">Debt Amount</label>
                   <input
                     className="w-full px-3 py-2 rounded border border-earth bg-earth-background text-earth focus:outline-none focus:ring-2 focus:ring-earth-accent"
                     type="number"
                     placeholder="Debt Amount"
                     value={checkinForm.debt_amount}
-                    onChange={(e) =>
-                      setCheckinForm((f) => ({
-                        ...f,
-                        debt_amount: e.target.value,
-                      }))
-                    }
+                    onChange={(e) => setCheckinForm((f) => ({ ...f, debt_amount: e.target.value }))}
                     required
                   />
                   <button
